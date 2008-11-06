@@ -13,7 +13,6 @@
 
         <property name="Nombre" column="PROF_NOMBRE" unique="true" not-null="true"/>
         <property name="Dni" column="PROF_DNI"/>
-        <property name="Nombre" column="PROF_NOMBRE"/>
         <property name="Password" column="PROF_PASSWORD"/>
         <property name="Telefono" column="PROF_TELEFONO"/>
         <property name="Despacho" column="PROF_DESPACHO"/>
