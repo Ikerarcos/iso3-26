@@ -14,9 +14,9 @@
         <property name="Concepto" column="EVAL_CONCEPTO"  not-null="true"/>
         <property name="Nota" column="EVAL_NOTA" not-null="true"/>
         
-       <many-to-one name="Alumno" column="ALUM_DNI" not-null="true" lazy="no-proxy" cascade="all"/>
+       <many-to-one name="Alum" column="ALUM_DNI" not-null="true" lazy="no-proxy" cascade="all"/>
 		
-		<many-to-one name="Asignatura" column="ASIG_ID" not-null="true"/>
+		<many-to-one name="Asig" column="ASIG_ID" not-null="true"/>
 		
 		
 		
