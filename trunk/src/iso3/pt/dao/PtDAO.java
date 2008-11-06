@@ -11,6 +11,7 @@ import iso3.pt.model.Evaluacion;
 import iso3.pt.model.Profesor;
 import iso3.pt.model.Unidad;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.List;
@@ -109,20 +110,34 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
-		// TODO Auto-generated method stub
-		return null;
+
+		Session session = factory.openSession();
+		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
+		List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig").list();
+        
+		for (Iterator<Asignatura> iter = Asignaturas.iterator(); iter.hasNext();) {
+			Asignatura asig = iter.next();
+			AsigSet.add(asig);
+            System.out.println(asig);
+        }
+        session.close();
+        return AsigSet;
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturas(int idAlumno) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+		Alumno alum = (Alumno) session.get(Alumno.class, idAlumno);
+		return alum.getAsignaturas();
+		
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor) {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+		Profesor prof = (Profesor) session.get(Profesor.class, idProfesor);
+		return prof.getAsignaturas();
+        
 	}
 
 	@Override
@@ -168,24 +183,32 @@ public class PtDAO implements IPtDao{
 	}
 
 	@Override
-	public Profesor getProfesor(int idAsignatura) {
-		// TODO Auto-generated method stub
-		return null;
+	public Profesor getProfesor(int idAsignatura) 
+	
+	{
+		
+		Session session = factory.openSession();
+        
+		Asignatura asig = (Asignatura) session.get(Asignatura.class, idAsignatura);
+		return asig.getProfesor();
 	}
 
 	@Override
 	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {
 		Session session = factory.openSession();
         
-		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.dni = "+dni).list();
+		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
 		
 		Profesor prof=null;
 		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) {
 			prof = iter.next();
+			System.out.println("Encontrado Profesor: ");
             System.out.println(prof);
         }
 		if (prof==null)
+		{	System.out.println("Para saltar la exception");
 			new UserNotFoundException();
+		}
 		return prof;
 	}
 
@@ -205,8 +228,38 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Profesor loginProfesor(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+		Profesor prof=null;
+		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
+		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) 
+		{
+			prof = iter.next();
+			System.out.println("Encontrado Profesor: ");
+        }
+		if (prof==null)
+		{	
+			new UserNotFoundException();
+			return null;
+		}
+		else
+		
+		{	profs = null;
+			prof = null;
+			profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni+" and prof.Password = '"+pass+"'").list();
+			for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) 
+			{
+				prof = iter.next();
+				System.out.println("Contraseña correcta  Profesor: ");
+	            	        }
+			if (prof==null)
+			{	
+				new IncorrectPasswordException();
+				return null;
+			}
+			else return prof;
+			
+		}
+		
 	}
 
 	@Override
@@ -226,7 +279,7 @@ public class PtDAO implements IPtDao{
         //Alumno alum1 = new Alumno(45820650,"mooontx","David Montero","625703060");
         Profesor prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
         prof1.addAsignatura(asig1);
-        asig1.setProfe(prof1);
+        asig1.setProfesor(prof1);
         
         
         
@@ -258,17 +311,26 @@ public class PtDAO implements IPtDao{
 	}
 	/**
 	 * @param args
+	 * @throws UserNotFoundException 
+	 * @throws IncorrectPasswordException 
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
 		PtDAO DAO = PtDAO.getInstancia();
+		System.out.println("Inserciones:");
 		instancia.inserciones1();
-		try {
-			System.out.println(instancia.getProfesorByDni(45612485));
-		} catch (UserNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		System.out.println("");
+		System.out.println("getProfesorByDni: ");
+		System.out.println(instancia.getProfesorByDni(4561285));
+		System.out.println("");
+		System.out.println("getProfesorByDni: ");
+		System.out.println(instancia.loginProfesor(45612485,"capullao"));
+		System.out.println("");
+		System.out.println("getProfesor por asignatura: ");
+		System.out.println(instancia.getProfesor(1));
+		System.out.println("");
+		
+		
 		//instancia.addEvaluacion("concepto",10,1,11);
 		//instancia.getAsignatura(1);
 	}

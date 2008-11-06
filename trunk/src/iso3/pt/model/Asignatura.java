@@ -96,19 +96,7 @@ public class Asignatura {
 		return Creditos;
 	}
 
-	/**
-	 * @param profe the profe to set
-	 */
-	public void setProfe(Profesor profe) {
-		Profesor = profe;
-	}
-
-	/**
-	 * @return the profe
-	 */
-	public Profesor getProfe() {
-		return Profesor;
-	}
+	
 
 	/**
 	 * @param alumnos the alumnos to set
@@ -178,5 +166,13 @@ public class Asignatura {
 	
 	public String toString(){
 		return "(" + this.Id + "|" + this.Codigo + "|" + this.Nombre + "|" + this.Creditos + ")";
+	}
+
+	public void setProfesor(Profesor profesor) {
+		Profesor = profesor;
+	}
+
+	public Profesor getProfesor() {
+		return Profesor;
 	}
 }
