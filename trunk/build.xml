@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project basedir="." default="help" name="HibernateEjemploCC">
+<project basedir="." default="help" name="ISO3-26">
 	
     <property name="source.dir" value="src"/>
     <property name="build.dir" value="bin"/>
@@ -21,7 +21,7 @@
         <delete dir="${build.dir}"/>
     </target>
 	
-    <target name="prepare">
+    <target name="prepare" depends="clean">
     	<mkdir dir="${build.dir}"/>
     </target>
  
@@ -40,7 +40,7 @@
     </target>
 	
     <target name="test" depends="build">
-        <java classname="iso3.hib.ejemploCC.Test" fork="true">
+        <java classname="iso3.pt.dao.ptDAO" fork="true">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
