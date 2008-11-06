@@ -3,6 +3,9 @@
  */
 package iso3.pt.model;
 
+import java.util.Set;
+import java.util.HashSet;
+
 /**
  * @author Iker
  *
@@ -16,9 +19,23 @@ public class Profesor {
 	private String Telefono;
 	private String Email;
 	private String Despacho;
+	private Set<Asignatura> Asignaturas;
 	
-	protected Profesor(){
+	public Profesor(int dni, String password, String nombre, String telefono,
+			String email, String despacho) {
+		super();
 		
+		Dni = dni;
+		Password = password;
+		Nombre = nombre;
+		Telefono = telefono;
+		Email = email;
+		Despacho = despacho;
+		
+		this.Asignaturas = new HashSet<Asignatura> ();
+	}
+	protected Profesor(){
+		this.Asignaturas = new HashSet<Asignatura> ();
 	}
 	/**
 	 * @param id the id to set
@@ -103,6 +120,22 @@ public class Profesor {
 	 */
 	public String getDespacho() {
 		return Despacho;
+	}
+	
+	public String toString(){
+		return "(" + this.Id + "|" + this.Dni + "|" + this.Password + "|" + this.Nombre + "|" + this.Telefono  + this.Email + "|" + this.Despacho + ")";
+	}
+	public boolean addAsignatura(Asignatura e) {
+		return getAsignaturas().add(e);
+	}
+	public boolean removeAsignatura(Asignatura o) {
+		return getAsignaturas().remove(o);
+	}
+	public void setAsignaturas(Set<Asignatura> asignaturas) {
+		Asignaturas = asignaturas;
+	}
+	public Set<Asignatura> getAsignaturas() {
+		return Asignaturas;
 	}
 	
 }

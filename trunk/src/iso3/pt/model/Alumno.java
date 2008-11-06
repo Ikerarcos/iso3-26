@@ -3,6 +3,7 @@
  */
 package iso3.pt.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -19,8 +20,18 @@ public class Alumno {
 	private Set<Asignatura> Asignaturas;//carga lazy
 	private Set<Evaluacion> Evaluaciones;//carga lazy y tratamiento cascada
 	
+	public Alumno(int dni, String password, String nombre, String telefono) {
+		super();
+		Dni = dni;
+		Password = password;
+		Nombre = nombre;
+		Telefono = telefono;
+		Asignaturas = new HashSet<Asignatura>();
+		Evaluaciones = new HashSet<Evaluacion>();
+	}
 	protected Alumno(){
-		
+		Asignaturas = new HashSet<Asignatura>();
+		Evaluaciones = new HashSet<Evaluacion>();
 	}
 	/**
 	 * @param dni the dni to set
@@ -112,4 +123,7 @@ public class Alumno {
 		Evaluaciones.remove(ev);
 	}
 	
+	public String toString(){
+		return "(" + this.Dni + "|" + this.Password + "|" + this.Nombre + "|" + this.Telefono + ")";
+	}
 }

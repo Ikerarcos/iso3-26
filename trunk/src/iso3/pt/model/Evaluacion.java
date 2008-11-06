@@ -88,4 +88,8 @@ public class Evaluacion {
 		return Asignatura;
 	}
 	
+	public String toString()
+	{	return "(" + this.Id + "|" + this.Concepto + "|" + this.Nota + "|" + this.Alumno + "|"+ this.Asignatura + ")";
+	}
+	
 }

@@ -3,6 +3,9 @@
  */
 package iso3.pt.model;
 
+
+
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -16,7 +19,7 @@ public class Asignatura {
 	private String Nombre;//not null
 	private float Creditos;
 	
-	private Profesor Profe;
+	private Profesor Profesor;
 	private Set<Alumno> Alumnos;//carga Lazy
 	private Set<Unidad> Unidades;//no hay unidades sin asignatura
 								//carga Lazy y tratamiento en cascada
@@ -26,10 +29,15 @@ public class Asignatura {
 		Codigo = codigo;
 		Nombre = nombre;
 		Creditos = creditos;
+		Alumnos = new HashSet<Alumno>();
+		Unidades = new HashSet<Unidad>();
+		Evaluaciones = new HashSet<Evaluacion>();
 	}
 
 	protected Asignatura(){
-		
+		Alumnos = new HashSet<Alumno>();
+		Unidades = new HashSet<Unidad>();
+		Evaluaciones = new HashSet<Evaluacion>();
 	}
 	
 	private boolean estaMatriculado(Alumno al){
@@ -92,14 +100,14 @@ public class Asignatura {
 	 * @param profe the profe to set
 	 */
 	public void setProfe(Profesor profe) {
-		Profe = profe;
+		Profesor = profe;
 	}
 
 	/**
 	 * @return the profe
 	 */
 	public Profesor getProfe() {
-		return Profe;
+		return Profesor;
 	}
 
 	/**

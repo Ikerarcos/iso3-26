@@ -51,7 +51,7 @@ public class PtDAO implements IPtDao{
 	@Override
 	public void addEvaluacion(String concepto, float nota, int idAsignatura,
 			int idAlumno) {
-		// TODO Auto-generated method stub
+		
 		
 		Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
@@ -61,10 +61,12 @@ public class PtDAO implements IPtDao{
         System.out.println(asig1);
         System.out.println(alum1);
         Evaluacion eval = new Evaluacion(concepto,nota);
-        asig1.addEvaluacion(eval);
-        alum1.addEvaluacion(eval);
         eval.setAlum(alum1);
         eval.setAsig(asig1);
+        System.out.println(eval);
+        asig1.addEvaluacion(eval);
+        alum1.addEvaluacion(eval);
+        
         
         session.save(asig1);
         session.save(alum1);
@@ -97,7 +99,12 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Asignatura getAsignatura(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+        //Transaction tx = session.beginTransaction();
+		Asignatura asig1 = (Asignatura) session.get(Asignatura.class, id);
+		System.out.println(asig1);
+		return asig1;
+        
 	}
 
 	@Override
@@ -168,8 +175,18 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {
-		// TODO Auto-generated method stub
-		return null;
+		Session session = factory.openSession();
+        
+		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.dni = "+dni).list();
+		
+		Profesor prof=null;
+		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) {
+			prof = iter.next();
+            System.out.println(prof);
+        }
+		if (prof==null)
+			new UserNotFoundException();
+		return prof;
 	}
 
 	@Override
@@ -204,17 +221,34 @@ public class PtDAO implements IPtDao{
         Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
-        Asignatura asig1 = new Asignatura(1,"ARQUI",5);
-        Asignatura asig2 = new Asignatura(2,"ISO",5);
+        Asignatura asig1 = new Asignatura(10,"ARQUI",5);
+        Asignatura asig2 = new Asignatura(20,"ISO",5);
+        //Alumno alum1 = new Alumno(45820650,"mooontx","David Montero","625703060");
+        Profesor prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
+        prof1.addAsignatura(asig1);
+        asig1.setProfe(prof1);
+        
+        
+        
+        //System.out.println(alum1);
+       // alum1.addAsignatura(asig1);
+        //alum1.addAsignatura(asig1);
+        //asig1.addAlumno(alum1);
+        //asig2.addAlumno(alum1);
         session.save(asig1);
         session.save(asig2);
+        //session.save(alum1);
+        session.save(prof1);
+        System.out.println(prof1);
+        System.out.println(asig1);
+        System.out.println(asig2);
         
-        List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig where asig.id in ('1','2')").list();
+        /*List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig where asig.id in ('1','2')").list();
         
         for (Iterator<Asignatura> iter = Asignaturas.iterator(); iter.hasNext();) {
-        	Asignatura emp1 = iter.next();
-            System.out.println(emp1);
-        }
+        	asig1 = iter.next();
+            System.out.println(asig1);
+        }*/
         
         
         
@@ -228,8 +262,15 @@ public class PtDAO implements IPtDao{
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		PtDAO DAO = PtDAO.getInstancia();
-		DAO.inserciones1();
-		//DA0.addEvaluacion("concepto",10,11,11);
+		instancia.inserciones1();
+		try {
+			System.out.println(instancia.getProfesorByDni(45612485));
+		} catch (UserNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//instancia.addEvaluacion("concepto",10,1,11);
+		//instancia.getAsignatura(1);
 	}
 
 }
