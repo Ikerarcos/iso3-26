@@ -18,13 +18,19 @@ public class Evaluacion {
 	private Alumno Alum;
 	private Asignatura Asig;
 	
+	public Evaluacion(String concepto, float nota) {
+		super();
+		Concepto = concepto;
+		Nota = nota;
+		
+	}
 	protected Evaluacion(){
 		
 	}
 	/**
 	 * @param id the id to set
 	 */
-	public void setId(int id) {
+	/*public void setId(int id) {
 		Id = id;
 	}
 	/**

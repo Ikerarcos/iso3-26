@@ -2,8 +2,8 @@ package iso3.pt.dao;
 
 
 import java.util.Set;
-
-import org.hibernate.mapping.List;
+import java.util.List;
+//import org.hibernate.mapping.List;
 
 
 
@@ -13,7 +13,7 @@ import iso3.pt.model.*;
 public interface IPtDao {
 	public Profesor getProfesor(int idAsignatura);
 	public Set<Alumno> getAlumnos(int idAsignatura);
-	public List/*<Evaluacion>*/ getEvaluacionesOrderedByAsignatura(int idAlumno);
+	public List<Evaluacion> getEvaluacionesOrderedByAsignatura(int idAlumno);
 	public Set<Evaluacion> getEvaluaciones(int idAsignatura, int idAlumno);
 	public void addEvaluacion(String concepto, float nota, int idAsignatura, int idAlumno);
 	public Set<Unidad> getUnidades(int idAsignatura);
@@ -27,5 +27,5 @@ public interface IPtDao {
 	public Profesor loginProfesor(int dni, String pass) throws UserNotFoundException, IncorrectPasswordException;
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor);
 	public Profesor getProfesorByDni(int dni) throws UserNotFoundException;
-	public List/*<Evaluacion>*/ getEvaluacionesAsignatura(int idAsignatura);
+	public List<Evaluacion> getEvaluacionesAsignatura(int idAsignatura);
 }

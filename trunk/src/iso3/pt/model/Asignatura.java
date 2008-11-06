@@ -20,6 +20,14 @@ public class Asignatura {
 	private Set<Alumno> Alumnos;//carga Lazy
 	private Set<Unidad> Unidades;//no hay unidades sin asignatura
 								//carga Lazy y tratamiento en cascada
+	private Set<Evaluacion> Evaluaciones;//carga Lazy
+	public Asignatura(int codigo, String nombre, float creditos) {
+		super();
+		Codigo = codigo;
+		Nombre = nombre;
+		Creditos = creditos;
+	}
+
 	protected Asignatura(){
 		
 	}
@@ -115,7 +123,7 @@ public class Asignatura {
 	public void removeAlumno(Alumno al){
 		Alumnos.remove(al);
 	}
-
+////////////////////////////Unidades
 	/**
 	 * @param unidades the unidades to set
 	 */
@@ -137,5 +145,30 @@ public class Asignatura {
 	public void removeUnidad(Unidad un){
 		Unidades.remove(un);
 	}
+
 	
+	
+	
+	
+	
+	////////////////////////////Evaluaciones
+	public void setEvaluaciones(Set<Evaluacion> evaluaciones) {
+		Evaluaciones = evaluaciones;
+	}
+
+	public Set<Evaluacion> getEvaluaciones() {
+		return Evaluaciones;
+	}
+	
+	public void addEvaluacion(Evaluacion ev){
+		Evaluaciones.add(ev);
+	}
+	
+	public void removeEvaluacion(Evaluacion ev){
+		Evaluaciones.remove(ev);
+	}
+	
+	public String toString(){
+		return "(" + this.Id + "|" + this.Codigo + "|" + this.Nombre + "|" + this.Creditos + ")";
+	}
 }

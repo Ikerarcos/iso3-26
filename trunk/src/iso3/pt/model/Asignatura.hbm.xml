@@ -10,7 +10,6 @@
         <id name="Id" column="ASIG_ID">
             <generator class="native"/>
         </id>
-
         <property name="Codigo" column="ASIG_CODIGO"  not-null="true" unique="true"/>
         <property name="Nombre" column="ASIG_NOMBRE" not-null="true"/>
         <property name="Creditos" column="ASIG_CREDITOS" />
