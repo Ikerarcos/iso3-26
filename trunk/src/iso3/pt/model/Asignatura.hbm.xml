@@ -16,7 +16,7 @@
         
        <many-to-one name="Profe" column="PROF_ID"/>
 		
-		<set name="Unidades" lazy="true" cascade="all" not-null="true">
+		<set name="Unidades" lazy="true" cascade="all">
 			<key column="ASIG_ID" not-null="true"/>
 			<one-to-many class="iso3.pt.model.Unidad"/>
 		</set>
