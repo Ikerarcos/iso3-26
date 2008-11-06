@@ -15,8 +15,8 @@ public class Evaluacion {
 	private String Concepto;//not null
 	private float Nota;//not null
 	
-	private Alumno Alum;
-	private Asignatura Asig;
+	private Alumno Alumno;
+	private Asignatura Asignatura;
 	
 	public Evaluacion(String concepto, float nota) {
 		super();
@@ -67,25 +67,25 @@ public class Evaluacion {
 	 * @param alum the alum to set
 	 */
 	public void setAlum(Alumno alum) {
-		Alum = alum;
+		Alumno = alum;
 	}
 	/**
 	 * @return the alum
 	 */
 	public Alumno getAlum() {
-		return Alum;
+		return Alumno;
 	}
 	/**
 	 * @param asig the asig to set
 	 */
 	public void setAsig(Asignatura asig) {
-		Asig = asig;
+		Asignatura = asig;
 	}
 	/**
 	 * @return the asig
 	 */
 	public Asignatura getAsig() {
-		return Asig;
+		return Asignatura;
 	}
 	
 }
