@@ -15,13 +15,15 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 //import org.hibernate.mapping.List;
-import org.hibernate.*;
+//import org.hibernate.*;
 
 
 
@@ -33,10 +35,12 @@ public class PtDAO implements IPtDao{
 
 	private static PtDAO instancia;
 	private SessionFactory factory;
+	 
 	//cache de asignaturas (lista indexada por id)
+	private Map<Integer, Asignatura> cache;
 	
 	private PtDAO(){
-		factory = new Configuration().configure().buildSessionFactory();
+		factory = new Configuration().configure().buildSessionFactory();		
 	}
 	
 	// Es un SINGLETON
@@ -57,7 +61,10 @@ public class PtDAO implements IPtDao{
 		Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
-        Asignatura asig1 = (Asignatura) session.get(Asignatura.class, idAsignatura);
+        //cache
+        Asignatura asig1 = cache.get(idAsignatura);
+        //Asignatura asig1 = (Asignatura) session.get(Asignatura.class, idAsignatura);
+        
         Alumno alum1 = (Alumno)session.get(Alumno.class,idAlumno);
         System.out.println(asig1);
         System.out.println(alum1);
@@ -67,7 +74,8 @@ public class PtDAO implements IPtDao{
         System.out.println(eval);
         asig1.addEvaluacion(eval);
         alum1.addEvaluacion(eval);
-        
+        cache.remove(idAsignatura);
+        cache.put(asig1.getId(), asig1);
         
         session.save(asig1);
         session.save(alum1);
@@ -317,6 +325,19 @@ public class PtDAO implements IPtDao{
 	public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
 		PtDAO DAO = PtDAO.getInstancia();
+				
+		System.out.println("Llenando cache...");
+		DAO.cache = new HashMap<Integer, Asignatura>();
+		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
+		Asignatura asig;
+		AsigSet = DAO.getAsignaturas();
+		for(Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();){
+			asig = iter.next();
+			DAO.cache.put(asig.getId(), asig);
+		}
+		AsigSet.clear();
+        System.out.println("Done cache!");
+		
 		System.out.println("Inserciones:");
 		instancia.inserciones1();
 		System.out.println("");
