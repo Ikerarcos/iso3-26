@@ -155,18 +155,19 @@ public class PtDAO implements IPtDao{
 	public Set<Evaluacion> getEvaluaciones(int idAsignatura, int idAlumno) {
 		// TODO Auto-generated method stub
 		//Session session = factory.openSession();
-        /*Transaction tx = session.beginTransaction();
+        Transaction tx = session.beginTransaction();
         
         
        
-        Set<Evaluacion> Evaluaciones = (Set)session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();
+        Set<Evaluacion> Evaluaciones = (Set)session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura+" and eval.alum = "+idAlumno).list();
         
-        for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
+        /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion emp1 = iter.next();
             System.out.println(emp1);
-        }
+        }*/
+        tx.commit();
         //session.close();
-        return Evaluaciones;*/
+        return Evaluaciones;
 	}
 
 	@Override
@@ -326,17 +327,17 @@ public class PtDAO implements IPtDao{
 	 */
 	public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
-		PtDAO DAO = PtDAO.getInstancia();
-		DAO.session = DAO.factory.openSession();
+		PtDAO.getInstancia();
+		instancia.session = instancia.factory.openSession();
 		
 		System.out.println("Llenando cache...");
-		DAO.cache = new HashMap<Integer, Asignatura>();
+		instancia.cache = new HashMap<Integer, Asignatura>();
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
 		Asignatura asig;
-		AsigSet = DAO.getAsignaturas();
+		AsigSet = instancia.getAsignaturas();
 		for(Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();){
 			asig = iter.next();
-			DAO.cache.put(asig.getId(), asig);
+			instancia.cache.put(asig.getId(), asig);
 		}
 		AsigSet.clear();
         System.out.println("Done cache!");
@@ -354,11 +355,16 @@ public class PtDAO implements IPtDao{
 		System.out.println(instancia.getProfesor(1));
 		System.out.println("");
 		
+		//instancia.getEvaluaciones(1, idAlumno)
+		/*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
+    	Evaluacion emp1 = iter.next();
+        System.out.println(emp1);
+    	}*/
 		
 		//instancia.addEvaluacion("concepto",10,1,11);
 		//instancia.getAsignatura(1);
 		
-		DAO.session.close();
+		instancia.session.close();
 	}
 
 }
