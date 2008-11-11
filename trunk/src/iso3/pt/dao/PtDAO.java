@@ -35,6 +35,7 @@ public class PtDAO implements IPtDao{
 
 	private static PtDAO instancia;
 	private SessionFactory factory;
+	private Session session;
 	 
 	//cache de asignaturas (lista indexada por id)
 	private Map<Integer, Asignatura> cache;
@@ -58,7 +59,7 @@ public class PtDAO implements IPtDao{
 			int idAlumno) {
 		
 		
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
         //cache
@@ -82,7 +83,7 @@ public class PtDAO implements IPtDao{
         session.save(eval);
         
         tx.commit();
-        session.close();
+        //session.close();
         System.out.println("Done addEvaluacion!");
 		
 	}
@@ -96,30 +97,32 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Alumno getAlumno(int id) {
 		// TODO Auto-generated method stub
-		return null;
+		Alumno alum1 = (Alumno)session.get(Alumno.class,id);
+		return alum1;
 	}
 
 	@Override
 	public Set<Alumno> getAlumnos(int idAsignatura) {
 		// TODO Auto-generated method stub
-		return null;
+		Asignatura asig1 = cache.get(idAsignatura);
+		return asig1.getAlumnos();
 	}
 
 	@Override
 	public Asignatura getAsignatura(int id) {
 		// TODO Auto-generated method stub
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
         //Transaction tx = session.beginTransaction();
-		Asignatura asig1 = (Asignatura) session.get(Asignatura.class, id);
-		System.out.println(asig1);
-		return asig1;
+		//Asignatura asig1 = (Asignatura) session.get(Asignatura.class, id);
+		//System.out.println(asig1);
+		return cache.get(id);
         
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
 
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
 		List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig").list();
         
@@ -128,13 +131,13 @@ public class PtDAO implements IPtDao{
 			AsigSet.add(asig);
             System.out.println(asig);
         }
-        session.close();
+        //session.close();
         return AsigSet;
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturas(int idAlumno) {
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
 		Alumno alum = (Alumno) session.get(Alumno.class, idAlumno);
 		return alum.getAsignaturas();
 		
@@ -142,7 +145,7 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor) {
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
 		Profesor prof = (Profesor) session.get(Profesor.class, idProfesor);
 		return prof.getAsignaturas();
         
@@ -151,25 +154,25 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Set<Evaluacion> getEvaluaciones(int idAsignatura, int idAlumno) {
 		// TODO Auto-generated method stub
-		return null;/*Session session = factory.openSession();
-        Transaction tx = session.beginTransaction();
+		//Session session = factory.openSession();
+        /*Transaction tx = session.beginTransaction();
         
         
        
-        List<Evaluacion> Evaluaciones = session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();
+        Set<Evaluacion> Evaluaciones = (Set)session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();
         
         for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion emp1 = iter.next();
             System.out.println(emp1);
         }
-        session.close();
+        //session.close();
         return Evaluaciones;*/
 	}
 
 	@Override
 	public List<Evaluacion> getEvaluacionesAsignatura(int idAsignatura) {
 		// TODO Auto-generated method stub
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
         
@@ -180,7 +183,7 @@ public class PtDAO implements IPtDao{
         	Evaluacion eval = iter.next();
             System.out.println(eval);
         }
-        session.close();
+        //session.close();
         return Evaluaciones;
 	}
 
@@ -191,11 +194,10 @@ public class PtDAO implements IPtDao{
 	}
 
 	@Override
-	public Profesor getProfesor(int idAsignatura) 
-	
+	public Profesor getProfesor(int idAsignatura) 	
 	{
 		
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
         
 		Asignatura asig = (Asignatura) session.get(Asignatura.class, idAsignatura);
 		return asig.getProfesor();
@@ -203,7 +205,7 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
         
 		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
 		
@@ -236,7 +238,7 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Profesor loginProfesor(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
-		Session session = factory.openSession();
+		//Session session = factory.openSession();
 		Profesor prof=null;
 		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
 		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) 
@@ -279,7 +281,7 @@ public class PtDAO implements IPtDao{
 	//Para pruebas iniciales
 	public void inserciones1(){
     	
-        Session session = factory.openSession();
+        //Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
         Asignatura asig1 = new Asignatura(10,"ARQUI",5);
@@ -314,7 +316,7 @@ public class PtDAO implements IPtDao{
         
         
         tx.commit();
-        session.close();
+        //session.close();
         System.out.println("Done inserciones1!");
 	}
 	/**
@@ -325,7 +327,8 @@ public class PtDAO implements IPtDao{
 	public static void main(String[] args) throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
 		PtDAO DAO = PtDAO.getInstancia();
-				
+		DAO.session = DAO.factory.openSession();
+		
 		System.out.println("Llenando cache...");
 		DAO.cache = new HashMap<Integer, Asignatura>();
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
@@ -354,6 +357,8 @@ public class PtDAO implements IPtDao{
 		
 		//instancia.addEvaluacion("concepto",10,1,11);
 		//instancia.getAsignatura(1);
+		
+		DAO.session.close();
 	}
 
 }
