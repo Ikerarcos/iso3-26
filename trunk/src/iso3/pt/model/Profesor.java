@@ -19,7 +19,7 @@ public class Profesor {
 	private String Telefono;
 	private String Email;
 	private String Despacho;
-	private Set<Asignatura> Asignaturas;
+	//private Set<Asignatura> Asignaturas;
 	
 	public Profesor(int dni, String password, String nombre, String telefono,
 			String email, String despacho) {
@@ -32,10 +32,10 @@ public class Profesor {
 		Email = email;
 		Despacho = despacho;
 		
-		this.Asignaturas = new HashSet<Asignatura> ();
+		//this.Asignaturas = new HashSet<Asignatura> ();
 	}
 	protected Profesor(){
-		this.Asignaturas = new HashSet<Asignatura> ();
+		//this.Asignaturas = new HashSet<Asignatura> ();
 	}
 	/**
 	 * @param id the id to set
@@ -125,7 +125,7 @@ public class Profesor {
 	public String toString(){
 		return "(" + this.Id + "|" + this.Dni + "|" + this.Password + "|" + this.Nombre + "|" + this.Telefono  + this.Email + "|" + this.Despacho + ")";
 	}
-	public boolean addAsignatura(Asignatura e) {
+	/*public boolean addAsignatura(Asignatura e) {
 		return getAsignaturas().add(e);
 	}
 	public boolean removeAsignatura(Asignatura o) {
@@ -136,6 +136,6 @@ public class Profesor {
 	}
 	public Set<Asignatura> getAsignaturas() {
 		return Asignaturas;
-	}
+	}*/
 	
 }

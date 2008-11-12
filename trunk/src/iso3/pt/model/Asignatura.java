@@ -23,7 +23,7 @@ public class Asignatura {
 	private Set<Alumno> Alumnos;//carga Lazy
 	private Set<Unidad> Unidades;//no hay unidades sin asignatura
 								//carga Lazy y tratamiento en cascada
-	private Set<Evaluacion> Evaluaciones;//carga Lazy
+	//private Set<Evaluacion> Evaluaciones;//carga Lazy
 	public Asignatura(int codigo, String nombre, float creditos) {
 		super();
 		Codigo = codigo;
@@ -31,13 +31,13 @@ public class Asignatura {
 		Creditos = creditos;
 		Alumnos = new HashSet<Alumno>();
 		Unidades = new HashSet<Unidad>();
-		Evaluaciones = new HashSet<Evaluacion>();
+		//Evaluaciones = new HashSet<Evaluacion>();
 	}
 
 	protected Asignatura(){
 		Alumnos = new HashSet<Alumno>();
 		Unidades = new HashSet<Unidad>();
-		Evaluaciones = new HashSet<Evaluacion>();
+		//Evaluaciones = new HashSet<Evaluacion>();
 	}
 	
 	private boolean estaMatriculado(Alumno al){
@@ -148,7 +148,7 @@ public class Asignatura {
 	
 	
 	////////////////////////////Evaluaciones
-	public void setEvaluaciones(Set<Evaluacion> evaluaciones) {
+	/*public void setEvaluaciones(Set<Evaluacion> evaluaciones) {
 		Evaluaciones = evaluaciones;
 	}
 
@@ -162,7 +162,7 @@ public class Asignatura {
 	
 	public void removeEvaluacion(Evaluacion ev){
 		Evaluaciones.remove(ev);
-	}
+	}*/
 	
 	public String toString(){
 		return "(" + this.Id + "|" + this.Codigo + "|" + this.Nombre + "|" + this.Creditos + ")";

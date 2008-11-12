@@ -16,6 +16,13 @@ public class Unidad {
 	private String Titulo;//not null
 	private String Contenido;
 	
+	public Unidad(String acr, String tit, String cont){
+		super();
+		Acronimo = acr;
+		Titulo = tit;
+		Contenido = cont;
+	}
+	
 	protected Unidad(){
 		
 	}
@@ -68,6 +75,8 @@ public class Unidad {
 		return Contenido;
 	}
 	
-	
+	public String toString(){
+		return "(" + this.Id + "|" + this.Acronimo + "|" + this.Titulo + "|" + this.Contenido + ")";
+	}
 	
 }

@@ -23,7 +23,7 @@
 		
 		<set name="Alumnos" table="MATRICULADO" lazy="true" >
 			<key column="ASIG_ID"/>
-			<many-to-many column="ALUM_DNI" class="iso3.pt.model.Asignatura"/>
+			<many-to-many column="ALUM_DNI" class="iso3.pt.model.Alumno"/>
 		</set>
 		
 		

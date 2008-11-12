@@ -69,11 +69,12 @@ public class PtDAO implements IPtDao{
         Alumno alum1 = (Alumno)session.get(Alumno.class,idAlumno);
         System.out.println(asig1);
         System.out.println(alum1);
-        Evaluacion eval = new Evaluacion(concepto,nota);
+        Evaluacion eval = new Evaluacion(concepto,nota,asig1);
         eval.setAlum(alum1);
         eval.setAsig(asig1);
         System.out.println(eval);
-        asig1.addEvaluacion(eval);
+        //no se puede hacer esto
+        //asig1.addEvaluacion(eval);
         alum1.addEvaluacion(eval);
         cache.remove(idAsignatura);
         cache.put(asig1.getId(), asig1);
@@ -147,7 +148,9 @@ public class PtDAO implements IPtDao{
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor) {
 		//Session session = factory.openSession();
 		Profesor prof = (Profesor) session.get(Profesor.class, idProfesor);
-		return prof.getAsignaturas();
+		//no se puede hacer esto, hay que recorrer las asignaturas
+		//prof.getAsignaturas();
+		return null;
         
 	}
 
@@ -285,27 +288,39 @@ public class PtDAO implements IPtDao{
         //Session session = factory.openSession();
         Transaction tx = session.beginTransaction();
         
-        Asignatura asig1 = new Asignatura(10,"ARQUI",5);
-        Asignatura asig2 = new Asignatura(20,"ISO",5);
-        //Alumno alum1 = new Alumno(45820650,"mooontx","David Montero","625703060");
+        //Asignatura asig2 = new Asignatura(10,"ARQUI",5);
+        Asignatura asig1 = new Asignatura(20,"ISO",5);
+        Alumno alum1 = new Alumno(45820650,"soy gay","David Montero","625703060");
+        //esto es matricular:
+        alum1.addAsignatura(asig1);
+        asig1.addAlumno(alum1); 
+        //hasta aquí
+        Unidad unid1 = new Unidad("Tema1","la homosexualidad de montxo","montxo es gay");
+        asig1.addUnidad(unid1);
         Profesor prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
-        prof1.addAsignatura(asig1);
         asig1.setProfesor(prof1);
         
+        Evaluacion eval1 = new Evaluacion("Cantidad de homesexualidad", 10, asig1);
+        alum1.addEvaluacion(eval1);
+        eval1.setAsig(asig1);
+        eval1.setAlum(alum1);
         
+        //PODRÍA HABER UNIDADES SIN ASIGNATURA
+        //MAL!!! (EN LA BD TB PODRÍA?)
+               
+        //LOS PROFESORES NO CONOCEN SUS ASIGNATURAS
+        //prof1.addAsignatura(asig1);mal!!!   
         
-        //System.out.println(alum1);
-       // alum1.addAsignatura(asig1);
-        //alum1.addAsignatura(asig1);
-        //asig1.addAlumno(alum1);
-        //asig2.addAlumno(alum1);
-        session.save(asig1);
-        session.save(asig2);
-        //session.save(alum1);
+        session.save(asig1);        
+        session.save(alum1);
+        session.save(unid1);
         session.save(prof1);
-        System.out.println(prof1);
+        session.save(eval1);        
         System.out.println(asig1);
-        System.out.println(asig2);
+        System.out.println(alum1);
+        System.out.println(unid1);
+        System.out.println(eval1);
+        System.out.println(prof1);
         
         /*List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig where asig.id in ('1','2')").list();
         
@@ -317,8 +332,7 @@ public class PtDAO implements IPtDao{
         
         
         tx.commit();
-        //session.close();
-        System.out.println("Done inserciones1!");
+        //session.close();        
 	}
 	/**
 	 * @param args
@@ -329,7 +343,11 @@ public class PtDAO implements IPtDao{
 		// TODO Auto-generated method stub
 		PtDAO.getInstancia();
 		instancia.session = instancia.factory.openSession();
-		
+		System.out.println("");
+		System.out.println("Inserciones:");
+		instancia.inserciones1();
+		System.out.println("Done inserciones1!");
+		System.out.println("");
 		System.out.println("Llenando cache...");
 		instancia.cache = new HashMap<Integer, Asignatura>();
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
@@ -341,9 +359,6 @@ public class PtDAO implements IPtDao{
 		}
 		AsigSet.clear();
         System.out.println("Done cache!");
-		
-		System.out.println("Inserciones:");
-		instancia.inserciones1();
 		System.out.println("");
 		System.out.println("getProfesorByDni: ");
 		System.out.println(instancia.getProfesorByDni(4561285));

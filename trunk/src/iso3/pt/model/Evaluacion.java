@@ -18,11 +18,11 @@ public class Evaluacion {
 	private Alumno Alumno;
 	private Asignatura Asignatura;
 	
-	public Evaluacion(String concepto, float nota) {
+	public Evaluacion(String concepto, float nota, Asignatura asig) {
 		super();
 		Concepto = concepto;
 		Nota = nota;
-		
+		Asignatura = asig;
 	}
 	protected Evaluacion(){
 		
