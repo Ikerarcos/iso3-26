@@ -11,6 +11,7 @@ import iso3.pt.model.Evaluacion;
 import iso3.pt.model.Profesor;
 import iso3.pt.model.Unidad;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -41,7 +42,8 @@ public class PtDAO implements IPtDao{
 	private Map<Integer, Asignatura> cache;
 	
 	private PtDAO(){
-		factory = new Configuration().configure().buildSessionFactory();		
+		factory = new Configuration().configure().buildSessionFactory();
+		cache = new HashMap<Integer, Asignatura>();
 	}
 	
 	// Es un SINGLETON
@@ -57,170 +59,191 @@ public class PtDAO implements IPtDao{
 	@Override
 	public void addEvaluacion(String concepto, float nota, int idAsignatura,
 			int idAlumno) {
-		
-		
-		//Session session = factory.openSession();
-        Transaction tx = session.beginTransaction();
-        
-        //cache
-        Asignatura asig1 = cache.get(idAsignatura);
-        //Asignatura asig1 = (Asignatura) session.get(Asignatura.class, idAsignatura);
-        
-        Alumno alum1 = (Alumno)session.get(Alumno.class,idAlumno);
-        System.out.println(asig1);
-        System.out.println(alum1);
+		System.out.println("");
+		System.out.println("addEvaluacion...");
+		Transaction tx = instancia.session.beginTransaction();
+        Asignatura asig1 = null;
+        //acceso cache
+        if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
+        Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,idAlumno);
         Evaluacion eval = new Evaluacion(concepto,nota,asig1);
         eval.setAlum(alum1);
         eval.setAsig(asig1);
-        System.out.println(eval);
         //no se puede hacer esto
         //asig1.addEvaluacion(eval);
         alum1.addEvaluacion(eval);
+        //actualización cache
         cache.remove(idAsignatura);
-        cache.put(asig1.getId(), asig1);
-        
-        session.save(asig1);
-        session.save(alum1);
-        session.save(eval);
-        
+        cache.put(idAsignatura, asig1);       
+        instancia.session.save(asig1);
+        instancia.session.save(alum1);
+        instancia.session.save(eval);
         tx.commit();
-        //session.close();
         System.out.println("Done addEvaluacion!");
-		
 	}
 
 	@Override
 	public void desmatricular(int idAlumno, int idAsignatura) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("");
+		System.out.println("desmatricular...");
+		Transaction tx = instancia.session.beginTransaction();
+		Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,idAlumno);
+		Asignatura asig1 = null;
+		if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
+		alum1.removeAsignatura(asig1);
+        asig1.removeAlumno(alum1);
+        cache.remove(idAsignatura);
+        cache.put(idAsignatura, asig1);       
+        instancia.session.save(asig1);
+        instancia.session.save(alum1);
+        tx.commit();
+        System.out.println("Done desmatricular!");
 	}
 
 	@Override
 	public Alumno getAlumno(int id) {
-		// TODO Auto-generated method stub
-		Alumno alum1 = (Alumno)session.get(Alumno.class,id);
+		// TODO Auto-generated method stub		
+		Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,id);
 		return alum1;
 	}
 
 	@Override
 	public Set<Alumno> getAlumnos(int idAsignatura) {
 		// TODO Auto-generated method stub
-		Asignatura asig1 = cache.get(idAsignatura);
+		Asignatura asig1 = null;
+		if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
 		return asig1.getAlumnos();
 	}
 
 	@Override
 	public Asignatura getAsignatura(int id) {
 		// TODO Auto-generated method stub
-		//Session session = factory.openSession();
-        //Transaction tx = session.beginTransaction();
-		//Asignatura asig1 = (Asignatura) session.get(Asignatura.class, id);
-		//System.out.println(asig1);
-		return cache.get(id);
+		Asignatura asig1 = null;
+		if (cache.containsKey(id))
+        	asig1 = cache.get(id);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, id);
+        	cache.put(id, asig1);
+        }
+		return asig1;
         
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
-
-		//Session session = factory.openSession();
+		//NO ES OPTIMO, HACE SIEMPRE LA QUERY... COMO HACERLO CON CACHE?
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
-		List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig").list();
-        
-		for (Iterator<Asignatura> iter = Asignaturas.iterator(); iter.hasNext();) {
-			Asignatura asig = iter.next();
-			AsigSet.add(asig);
-            System.out.println(asig);
+		AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list();
+		Asignatura asig = null;
+		int id;
+		for (Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();) {
+			asig = iter.next();
+			id = asig.getId();
+			if (!cache.containsKey(id)){        	
+	        	asig = (Asignatura) instancia.session.get(Asignatura.class, id);
+	        	cache.put(id, asig);
+	        }
         }
-        //session.close();
         return AsigSet;
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturas(int idAlumno) {
-		//Session session = factory.openSession();
-		Alumno alum = (Alumno) session.get(Alumno.class, idAlumno);
+		Alumno alum = (Alumno) instancia.session.get(Alumno.class, idAlumno);
 		return alum.getAsignaturas();
 		
 	}
 
 	@Override
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor) {
-		//Session session = factory.openSession();
-		Profesor prof = (Profesor) session.get(Profesor.class, idProfesor);
-		//no se puede hacer esto, hay que recorrer las asignaturas
+		//no se puede hacer esto, hay que recorrer las asignaturas		
+		//Profesor prof = (Profesor) session.get(Profesor.class, idProfesor);
 		//prof.getAsignaturas();
-		return null;
+		Set<Asignatura> asigsProf = new HashSet<Asignatura>();
+		Set<Asignatura> asigs = new HashSet<Asignatura>();
+		instancia.getAsignaturas();
+		asigs = (Set)cache.values();
+		Asignatura asig = null;
+		for(Iterator<Asignatura> iter = asigs.iterator(); iter.hasNext();){
+			asig = iter.next();
+			if(asig.getProfesor().getDni() == idProfesor)
+				asigsProf.add(asig);
+		}
+		return asigsProf;
         
 	}
 
 	@Override
 	public Set<Evaluacion> getEvaluaciones(int idAsignatura, int idAlumno) {
 		// TODO Auto-generated method stub
-		//Session session = factory.openSession();
-        Transaction tx = session.beginTransaction();
-        
-        
-       
-        Set<Evaluacion> Evaluaciones = (Set)session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura+" and eval.alum = "+idAlumno).list();
+		Asignatura asig1 = null;
+		if (!cache.containsKey(idAsignatura)){        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
+		//PROBAR SI ESTO FUNCIONA!!!!
+		Set<Evaluacion> Evaluaciones = (Set)instancia.session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura+" and eval.alum = "+idAlumno).list();
         
         /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion emp1 = iter.next();
-            System.out.println(emp1);
         }*/
-        tx.commit();
-        //session.close();
         return Evaluaciones;
 	}
-
+	
 	@Override
 	public List<Evaluacion> getEvaluacionesAsignatura(int idAsignatura) {
-		// TODO Auto-generated method stub
-		//Session session = factory.openSession();
-        Transaction tx = session.beginTransaction();
-        
-        
-        
-        List<Evaluacion> Evaluaciones = session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();
-        
-        for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
+		// TODO Auto-generated method stub 
+        //PROBAR SI FUNCIONA!!!
+		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();      
+        /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion eval = iter.next();
-            System.out.println(eval);
-        }
-        //session.close();
+        }*/
         return Evaluaciones;
 	}
 
 	@Override
 	public List<Evaluacion> getEvaluacionesOrderedByAsignatura(int idAlumno) {
 		// TODO Auto-generated method stub
-		return null;
+		//PROBAR SI FUNCIONA!!!
+		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.alum = "+idAlumno+" orderby Asignatura").list();      
+        /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
+        	Evaluacion eval = iter.next();
+        }*/
+        return Evaluaciones;
 	}
 
 	@Override
-	public Profesor getProfesor(int idAsignatura) 	
-	{
-		
-		//Session session = factory.openSession();
-        
-		Asignatura asig = (Asignatura) session.get(Asignatura.class, idAsignatura);
-		return asig.getProfesor();
-	}
-
-	@Override
-	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {
-		//Session session = factory.openSession();
-        
-		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
-		
-		Profesor prof=null;
-		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) {
-			prof = iter.next();
-			System.out.println("Encontrado Profesor: ");
-            System.out.println(prof);
+	public Profesor getProfesor(int idAsignatura) 	{
+		Asignatura asig1 = null;
+		if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
         }
-		if (prof==null)
-		{	System.out.println("Para saltar la exception");
+		return asig1.getProfesor();
+	}
+
+	@Override
+	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {        
+		Profesor prof= (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni);
+		if (prof == null){
 			new UserNotFoundException();
 		}
 		return prof;
@@ -229,110 +252,116 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Set<Unidad> getUnidades(int idAsignatura) {
 		// TODO Auto-generated method stub
-		return null;
+		Asignatura asig1 = null;
+		if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
+		return asig1.getUnidades();
 	}
 
 	@Override
 	public Alumno loginAlumno(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
-		return null;
+		Alumno alum = (Alumno)instancia.session.createQuery("from Alumno as alum where alum.Dni = "+dni);
+		if (alum == null){	
+			new UserNotFoundException();
+			return null;
+		}
+		else{	
+			alum = null;
+			alum = (Alumno)instancia.session.createQuery("from Alumno as alum where alum.Dni = "+dni+" and alum.Password = '"+pass+"'");			
+			if (alum == null)
+			{	
+				new IncorrectPasswordException();
+				return null;
+			}
+			else return alum;			
+		}		
 	}
 
 	@Override
 	public Profesor loginProfesor(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
-		//Session session = factory.openSession();
-		Profesor prof=null;
-		List<Profesor> profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
-		for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) 
-		{
-			prof = iter.next();
-			System.out.println("Encontrado Profesor: ");
-        }
-		if (prof==null)
-		{	
+		Profesor prof = (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni);
+		if (prof == null){	
 			new UserNotFoundException();
 			return null;
 		}
-		else
-		
-		{	profs = null;
+		else{	
 			prof = null;
-			profs= session.createQuery("from Profesor as prof where prof.Dni = "+dni+" and prof.Password = '"+pass+"'").list();
-			for (Iterator<Profesor> iter = profs.iterator(); iter.hasNext();) 
-			{
-				prof = iter.next();
-				System.out.println("Contraseña correcta  Profesor: ");
-	            	        }
-			if (prof==null)
+			prof = (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni+" and prof.Password = '"+pass+"'");			
+			if (prof == null)
 			{	
 				new IncorrectPasswordException();
 				return null;
 			}
-			else return prof;
-			
-		}
-		
+			else return prof;			
+		}		
 	}
 
 	@Override
 	public void matricular(int idAlumno, int idAsignatura) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("");
+		System.out.println("matricular...");
+		Transaction tx = instancia.session.beginTransaction();
+		Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,idAlumno);
+		Asignatura asig1 = null;
+		if (cache.containsKey(idAsignatura))
+        	asig1 = cache.get(idAsignatura);
+        else{        	
+        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
+        	cache.put(idAsignatura, asig1);
+        }
+		alum1.addAsignatura(asig1);
+        asig1.addAlumno(alum1);
+        cache.remove(idAsignatura);
+        cache.put(idAsignatura, asig1);       
+        instancia.session.save(asig1);
+        instancia.session.save(alum1);
+        tx.commit();
+        System.out.println("Done matricular!");
 	}
 	
 	//Para pruebas iniciales
 	public void inserciones1(){
-    	
-        //Session session = factory.openSession();
-        Transaction tx = session.beginTransaction();
-        
-        //Asignatura asig2 = new Asignatura(10,"ARQUI",5);
+		System.out.println("");
+		System.out.println("Inserciones:");
+		
+		Transaction tx = instancia.session.beginTransaction();
         Asignatura asig1 = new Asignatura(20,"ISO",5);
         Alumno alum1 = new Alumno(45820650,"soy gay","David Montero","625703060");
-        //esto es matricular:
-        alum1.addAsignatura(asig1);
-        asig1.addAlumno(alum1); 
-        //hasta aquí
+        instancia.session.save(asig1);
+        instancia.session.save(alum1);
+        tx.commit();
+        
+        instancia.matricular(alum1.getDni(), asig1.getId()); 
+        
+        tx = instancia.session.beginTransaction();
         Unidad unid1 = new Unidad("Tema1","la homosexualidad de montxo","montxo es gay");
         asig1.addUnidad(unid1);
         Profesor prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
         asig1.setProfesor(prof1);
         
-        Evaluacion eval1 = new Evaluacion("Cantidad de homesexualidad", 10, asig1);
-        alum1.addEvaluacion(eval1);
-        eval1.setAsig(asig1);
-        eval1.setAlum(alum1);
-        
         //PODRÍA HABER UNIDADES SIN ASIGNATURA
         //MAL!!! (EN LA BD TB PODRÍA?)
+        instancia.session.save(unid1);
+        instancia.session.save(prof1);
+        tx.commit();
+        
+        instancia.addEvaluacion("Cantidad de homesexualidad", 10, asig1.getId(), alum1.getDni());                            
                
         //LOS PROFESORES NO CONOCEN SUS ASIGNATURAS
         //prof1.addAsignatura(asig1);mal!!!   
         
-        session.save(asig1);        
-        session.save(alum1);
-        session.save(unid1);
-        session.save(prof1);
-        session.save(eval1);        
-        System.out.println(asig1);
-        System.out.println(alum1);
-        System.out.println(unid1);
-        System.out.println(eval1);
-        System.out.println(prof1);
+        instancia.desmatricular(alum1.getDni(), asig1.getId());
         
-        /*List<Asignatura> Asignaturas = session.createQuery("from Asignatura as asig where asig.id in ('1','2')").list();
-        
-        for (Iterator<Asignatura> iter = Asignaturas.iterator(); iter.hasNext();) {
-        	asig1 = iter.next();
-            System.out.println(asig1);
-        }*/
-        
-        
-        
-        tx.commit();
-        //session.close();        
+        System.out.println("");
+        System.out.println("Done inserciones1!");
 	}
 	/**
 	 * @param args
@@ -343,13 +372,11 @@ public class PtDAO implements IPtDao{
 		// TODO Auto-generated method stub
 		PtDAO.getInstancia();
 		instancia.session = instancia.factory.openSession();
-		System.out.println("");
-		System.out.println("Inserciones:");
+		
 		instancia.inserciones1();
-		System.out.println("Done inserciones1!");
-		System.out.println("");
+		
+		/*System.out.println("");
 		System.out.println("Llenando cache...");
-		instancia.cache = new HashMap<Integer, Asignatura>();
 		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
 		Asignatura asig;
 		AsigSet = instancia.getAsignaturas();
@@ -358,17 +385,18 @@ public class PtDAO implements IPtDao{
 			instancia.cache.put(asig.getId(), asig);
 		}
 		AsigSet.clear();
-        System.out.println("Done cache!");
-		System.out.println("");
+        System.out.println("Done cache!");*/
+		
+		/*System.out.println("");
 		System.out.println("getProfesorByDni: ");
 		System.out.println(instancia.getProfesorByDni(4561285));
 		System.out.println("");
-		System.out.println("getProfesorByDni: ");
-		System.out.println(instancia.loginProfesor(45612485,"capullao"));
+		System.out.println("loginProfesor: ");
+		System.out.println(instancia.loginProfesor(45612485,"capullo"));
 		System.out.println("");
 		System.out.println("getProfesor por asignatura: ");
 		System.out.println(instancia.getProfesor(1));
-		System.out.println("");
+		System.out.println("");*/
 		
 		//instancia.getEvaluaciones(1, idAlumno)
 		/*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
