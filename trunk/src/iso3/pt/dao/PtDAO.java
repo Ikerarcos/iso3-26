@@ -40,10 +40,12 @@ public class PtDAO implements IPtDao{
 	 
 	//cache de asignaturas (lista indexada por id)
 	private Map<Integer, Asignatura> cache;
+	private boolean cacheLlena;
 	
 	private PtDAO(){
 		factory = new Configuration().configure().buildSessionFactory();
 		cache = new HashMap<Integer, Asignatura>();
+		cacheLlena = false;
 	}
 	
 	// Es un SINGLETON
@@ -147,20 +149,25 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
-		//NO ES OPTIMO, HACE SIEMPRE LA QUERY... COMO HACERLO CON CACHE?
-		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
-		AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list();
-		Asignatura asig = null;
-		int id;
-		for (Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();) {
-			asig = iter.next();
-			id = asig.getId();
-			if (!cache.containsKey(id)){        	
-	        	asig = (Asignatura) instancia.session.get(Asignatura.class, id);
-	        	cache.put(id, asig);
+		//NO ES OPTIMO, HACE SIEMPRE LA QUERY... COMO HACERLO CON CACHE?		
+		if(!cacheLlena){
+			Set<Asignatura> AsigSet = new HashSet<Asignatura>();
+			AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list();
+			Asignatura asig = null;
+			int id;
+			for (Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();) {
+				asig = iter.next();
+				id = asig.getId();
+				if (!cache.containsKey(id)){        	
+		        	asig = (Asignatura) instancia.session.get(Asignatura.class, id);
+		        	cache.put(id, asig);
+		        }
 	        }
-        }
-        return AsigSet;
+			return AsigSet;
+		}
+		else{
+			return (Set)cache.values();
+		}        
 	}
 
 	@Override
@@ -221,7 +228,7 @@ public class PtDAO implements IPtDao{
 	public List<Evaluacion> getEvaluacionesOrderedByAsignatura(int idAlumno) {
 		// TODO Auto-generated method stub
 		//PROBAR SI FUNCIONA!!!
-		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.alum = "+idAlumno+" orderby Asignatura").list();      
+		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.alum = "+idAlumno+" order by Asignatura").list();      
         /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion eval = iter.next();
         }*/
