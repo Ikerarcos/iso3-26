@@ -11,7 +11,10 @@
         <property name="hibernate.connection.password">iso3</property>
         
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
+        
+        <!-- Quitado: 
         <property name="hbm2ddl.auto">create</property>
+        -->
         
 		<!-- C3p0 pool connection manager
         <property name="hibernate.c3p0.min_size">5</property>
