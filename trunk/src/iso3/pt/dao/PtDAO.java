@@ -141,7 +141,8 @@ public class PtDAO implements IPtDao{
         	asig1 = cache.get(id);
         else{        	
         	asig1 = (Asignatura) instancia.session.get(Asignatura.class, id);
-        	cache.put(id, asig1);
+        	if (asig1!=null)
+        		cache.put(id, asig1);
         }
 		return asig1;
         
@@ -149,25 +150,28 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
-		//NO ES OPTIMO, HACE SIEMPRE LA QUERY... COMO HACERLO CON CACHE?		
-		if(!cacheLlena){
+		//NO ES OPTIMO, HACE SIEMPRE LA QUERY... COMO HACERLO CON CACHE?
+		//YO CREO Q ESTO SOLO SE USA UNA VEZ. T DA IGUAL Q LA CACHÉ ESTE LLENA O NO.
+		//LO UNICO QUE HACE ES BORRARLA Y VOLVERLA A CARGAR
+		
+			cache.clear();
 			Set<Asignatura> AsigSet = new HashSet<Asignatura>();
-			AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list();
+			//AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list(); NO SE PUEDE HACER CAST ASI
+			List<Asignatura> Asigs = instancia.session.createQuery("from Asignatura as asig").list();
 			Asignatura asig = null;
-			int id;
-			for (Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();) {
+			
+			for (Iterator<Asignatura> iter = Asigs.iterator(); iter.hasNext();) {
 				asig = iter.next();
-				id = asig.getId();
-				if (!cache.containsKey(id)){        	
-		        	asig = (Asignatura) instancia.session.get(Asignatura.class, id);
-		        	cache.put(id, asig);
+				
+				if (!cache.containsKey(asig.getId())){        	
+		        	asig = (Asignatura) instancia.session.get(Asignatura.class, asig.getId());
+		        	cache.put(asig.getId(), asig);
 		        }
+				AsigSet.add(asig);//Carga del List al Set
+				System.out.println(asig);
 	        }
 			return AsigSet;
-		}
-		else{
-			return (Set)cache.values();
-		}        
+		
 	}
 
 	@Override
@@ -216,11 +220,8 @@ public class PtDAO implements IPtDao{
 	@Override
 	public List<Evaluacion> getEvaluacionesAsignatura(int idAsignatura) {
 		// TODO Auto-generated method stub 
-        //PROBAR SI FUNCIONA!!!
-		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.asig = "+idAsignatura).list();      
-        /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
-        	Evaluacion eval = iter.next();
-        }*/
+        //COMO SE HACE??SI ES UNIDIRECCIONAL EN EL DIBUJO. NO SE PUEDE IR DE ASIGNATURAS A EVALUACIONES
+		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.Asig = "+idAsignatura).list();      
         return Evaluaciones;
 	}
 
@@ -228,7 +229,8 @@ public class PtDAO implements IPtDao{
 	public List<Evaluacion> getEvaluacionesOrderedByAsignatura(int idAlumno) {
 		// TODO Auto-generated method stub
 		//PROBAR SI FUNCIONA!!!
-		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.alum = "+idAlumno+" order by Asignatura").list();      
+		List<Evaluacion> Evaluaciones = instancia.session.createQuery("from Evaluacion as eval where eval.Alum = "+idAlumno+"order by eval.Asig").list();
+		
         /*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
         	Evaluacion eval = iter.next();
         }*/
@@ -237,22 +239,22 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Profesor getProfesor(int idAsignatura) 	{
-		Asignatura asig1 = null;
-		if (cache.containsKey(idAsignatura))
-        	asig1 = cache.get(idAsignatura);
-        else{        	
-        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
-        	cache.put(idAsignatura, asig1);
-        }
-		return asig1.getProfesor();
+		Asignatura asig1 = instancia.getAsignatura(idAsignatura);
+		if (asig1!=null)
+			return asig1.getProfesor();
+		else return null;
 	}
 
 	@Override
 	public Profesor getProfesorByDni(int dni) throws UserNotFoundException {        
-		Profesor prof= (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni);
-		if (prof == null){
-			new UserNotFoundException();
+		List<Profesor> profs= instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
+		Profesor prof=null;
+		
+		
+		if (profs.isEmpty()){
+			prof=null;
 		}
+		else prof = profs.get(0);//Obtiene el primero, segun está puede haber mas de un profe con el mismo dni, xo no tiene sentido
 		return prof;
 	}
 
@@ -273,40 +275,47 @@ public class PtDAO implements IPtDao{
 	public Alumno loginAlumno(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
 		// TODO Auto-generated method stub
-		Alumno alum = (Alumno)instancia.session.createQuery("from Alumno as alum where alum.Dni = "+dni);
-		if (alum == null){	
-			new UserNotFoundException();
-			return null;
-		}
-		else{	
-			alum = null;
-			alum = (Alumno)instancia.session.createQuery("from Alumno as alum where alum.Dni = "+dni+" and alum.Password = '"+pass+"'");			
-			if (alum == null)
+		
+		Alumno alum1  = (Alumno) instancia.session.get(Alumno.class, dni);
+		if (alum1 != null)
+			if (alum1.getPassword().equals(pass))
 			{	
-				new IncorrectPasswordException();
-				return null;
+				
+				return alum1;
 			}
-			else return alum;			
-		}		
+			else 
+				{new IncorrectPasswordException();
+				return null;
+					
+				}
+		else
+			{
+			new UserNotFoundException(); 
+			return null;
+			}
 	}
+			
+	
 
 	@Override
 	public Profesor loginProfesor(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
-		Profesor prof = (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni);
-		if (prof == null){	
+		
+		List<Profesor> prof = instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni).list();
+		if (prof.isEmpty()){	
 			new UserNotFoundException();
 			return null;
 		}
 		else{	
-			prof = null;
-			prof = (Profesor)instancia.session.createQuery("from Profesor as prof where prof.Dni = "+dni+" and prof.Password = '"+pass+"'");			
-			if (prof == null)
-			{	
+			Profesor prof1 = prof.get(0);
+			if (prof1.getPassword().equals(pass))
+				return prof1;
+			else 
+			{
 				new IncorrectPasswordException();
 				return null;
+				
 			}
-			else return prof;			
 		}		
 	}
 
@@ -317,13 +326,7 @@ public class PtDAO implements IPtDao{
 		System.out.println("matricular...");
 		Transaction tx = instancia.session.beginTransaction();
 		Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,idAlumno);
-		Asignatura asig1 = null;
-		if (cache.containsKey(idAsignatura))
-        	asig1 = cache.get(idAsignatura);
-        else{        	
-        	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
-        	cache.put(idAsignatura, asig1);
-        }
+		Asignatura asig1 = instancia.getAsignatura(1);//Usa la funcion ya creada, busta en cache, y si no está busca y actualiza
 		alum1.addAsignatura(asig1);
         asig1.addAlumno(alum1);
         cache.remove(idAsignatura);
@@ -380,30 +383,74 @@ public class PtDAO implements IPtDao{
 		PtDAO.getInstancia();
 		instancia.session = instancia.factory.openSession();
 		
-		instancia.inserciones1();
+		//instancia.inserciones1(); YA NO HACE FALTA, NO SE BORRAN UNA VEZ QUE SE CARGAN LA PRIMERA VEZ
 		
-		/*System.out.println("");
-		System.out.println("Llenando cache...");
-		Set<Asignatura> AsigSet = new HashSet<Asignatura>();
-		Asignatura asig;
-		AsigSet = instancia.getAsignaturas();
-		for(Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();){
-			asig = iter.next();
-			instancia.cache.put(asig.getId(), asig);
-		}
-		AsigSet.clear();
-        System.out.println("Done cache!");*/
+		instancia.getAsignaturas();
 		
-		/*System.out.println("");
+		System.out.println(instancia.getAsignatura(1));
+		
+		
+				
+		System.out.println("");
 		System.out.println("getProfesorByDni: ");
-		System.out.println(instancia.getProfesorByDni(4561285));
+		System.out.println(instancia.getProfesorByDni(45612485));
 		System.out.println("");
 		System.out.println("loginProfesor: ");
 		System.out.println(instancia.loginProfesor(45612485,"capullo"));
 		System.out.println("");
+		System.out.println("loginAlumno: ");
+		System.out.println(instancia.loginAlumno(45820650,"soy gay"));
+		System.out.println("");
 		System.out.println("getProfesor por asignatura: ");
 		System.out.println(instancia.getProfesor(1));
-		System.out.println("");*/
+		System.out.println("");
+		
+		//System.out.println("Prueba matricular: ");
+		instancia.matricular(45820650, 1);
+		//Alumnos para asignatura 1
+		Set<Alumno> alum=instancia.getAsignatura(1).getAlumnos();
+		for (Iterator<Alumno> iter = alum.iterator(); iter.hasNext();) {
+			Alumno alum1 = iter.next();
+	        System.out.println(alum1);
+	        
+	    	}
+		System.out.println("");
+		//asignaturas para alumno
+		Set<Asignatura> asig=instancia.getAlumno(45820650).getAsignaturas();
+		for (Iterator<Asignatura> iter = asig.iterator(); iter.hasNext();) {
+			Asignatura alum1 = iter.next();
+	        System.out.println(alum1);
+	        
+	    	}
+		System.out.println("");
+		System.out.println("getUnidades por asignatura: ");
+		System.out.println(instancia.getUnidades(1));
+		System.out.println("");
+		
+		System.out.println("getProfesor por asignatura: ");
+		System.out.println(instancia.getProfesor(1));
+		System.out.println("");
+		
+		System.out.println("getEvaluacionesOrderedByAsignatura: ");
+		
+		List<Evaluacion> eval=instancia.getEvaluacionesOrderedByAsignatura(45820650); 
+		for (Iterator<Evaluacion> iter = eval.iterator(); iter.hasNext();) {
+			Evaluacion alum1 = iter.next();
+	        System.out.println(alum1);
+	        
+	    	}
+		System.out.println("");
+		
+		System.out.println("getEvaluacionesAsignatura: ");
+		
+		List<Evaluacion> eval1=instancia.getEvaluacionesAsignatura(1); 
+		for (Iterator<Evaluacion> iter = eval1.iterator(); iter.hasNext();) {
+			Evaluacion alum1 = iter.next();
+	        System.out.println(alum1);
+	        
+	    	}
+		System.out.println("");
+		
 		
 		//instancia.getEvaluaciones(1, idAlumno)
 		/*for (Iterator<Evaluacion> iter = Evaluaciones.iterator(); iter.hasNext();) {
