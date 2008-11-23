@@ -11,7 +11,8 @@ import iso3.pt.model.Evaluacion;
 import iso3.pt.model.Profesor;
 import iso3.pt.model.Unidad;
 
-import java.util.Collections;
+
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -23,6 +24,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
+
 //import org.hibernate.mapping.List;
 //import org.hibernate.*;
 
@@ -40,7 +42,7 @@ public class PtDAO implements IPtDao{
 	 
 	//cache de asignaturas (lista indexada por id)
 	private Map<Integer, Asignatura> cache;
-	private boolean cacheLlena;
+	private boolean cacheLlena=false;
 	
 	private PtDAO(){
 		factory = new Configuration().configure().buildSessionFactory();
@@ -52,6 +54,7 @@ public class PtDAO implements IPtDao{
 	public static PtDAO getInstancia(){
 		if (instancia == null) {
 				instancia = new PtDAO();
+				instancia.cacheLlena = false;
 		}
 		return instancia;
 	}
@@ -165,8 +168,23 @@ public class PtDAO implements IPtDao{
 		}
 		else 
 			
-		{	return null;
-			// NO SE KMO RECORRER LA CACHÉ
+		{	
+			Collection<Asignatura> col = cache.values();
+			AsigSet = new HashSet<Asignatura>();
+			for (Iterator<Asignatura> iter = col.iterator(); iter.hasNext();) 
+			{	Asignatura asig = iter.next();
+				if (asig!=null) //NO SE XQ, XO EN LA PRIMERA REPETICION DEVUELVE NULL
+					AsigSet.add(asig);
+	        }
+			
+			
+			for (Iterator<Asignatura> iter = AsigSet.iterator(); iter.hasNext();) {
+				Asignatura asig = iter.next();
+				System.out.println(asig);
+	        }
+			
+			return AsigSet;
+			
         }
 		
 	}
@@ -187,8 +205,9 @@ public class PtDAO implements IPtDao{
 		Asignatura asig = null;
 		for(Iterator<Asignatura> iter = asigs.iterator(); iter.hasNext();){
 			asig = iter.next();
-			if(asig.getProfesor().getDni() == idProfesor)
-				asigsProf.add(asig);
+			if (asig.getProfesor() !=null )
+				if(  (asig.getProfesor().getDni() == idProfesor))
+					asigsProf.add(asig);
 		}
 		return asigsProf;
         
@@ -253,7 +272,9 @@ public class PtDAO implements IPtDao{
         	asig1 = (Asignatura) instancia.session.get(Asignatura.class, idAsignatura);
         	cache.put(idAsignatura, asig1);
         }
-		return asig1.getUnidades();
+		if (asig1!=null)
+			return asig1.getUnidades();
+		else return null;
 	}
 
 	@Override
@@ -311,7 +332,9 @@ public class PtDAO implements IPtDao{
 		System.out.println("matricular...");
 		Transaction tx = instancia.session.beginTransaction();
 		Alumno alum1 = (Alumno)instancia.session.get(Alumno.class,idAlumno);
-		Asignatura asig1 = instancia.getAsignatura(1);//Usa la funcion ya creada, busta en cache, y si no está busca y actualiza
+		Asignatura asig1 = instancia.getAsignatura(idAsignatura);//Usa la funcion ya creada, busta en cache, y si no está busca y actualiza
+		if ((asig1!=null) && (alum1!=null))
+		{
 		alum1.addAsignatura(asig1);
         asig1.addAlumno(alum1);
         cache.remove(idAsignatura);
@@ -319,7 +342,8 @@ public class PtDAO implements IPtDao{
         instancia.session.save(asig1);
         instancia.session.save(alum1);
         tx.commit();
-        System.out.println("Done matricular!");
+        System.out.println("Done matricular!");}
+		else System.out.println("No existe alumno o asignatura");
 	}
 	
 	//Para pruebas iniciales
@@ -328,7 +352,14 @@ public class PtDAO implements IPtDao{
 		System.out.println("Inserciones:");
 		
 		Transaction tx = instancia.session.beginTransaction();
+        Profesor prof1 = new Profesor(45820650,"hola",",montxo","625703060","montxo@","desp45");
+        instancia.session.save(prof1);
+        tx.commit();
+		
+		tx = instancia.session.beginTransaction();
         Asignatura asig1 = new Asignatura(20,"ISO",5);
+        asig1.setProfesor(prof1);
+        instancia.session.flush();
         Alumno alum1 = new Alumno(45820650,"soy gay","David Montero","625703060");
         instancia.session.save(asig1);
         instancia.session.save(alum1);
@@ -339,7 +370,7 @@ public class PtDAO implements IPtDao{
         tx = instancia.session.beginTransaction();
         Unidad unid1 = new Unidad("Tema1","la homosexualidad de montxo","montxo es gay");
         asig1.addUnidad(unid1);
-        Profesor prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
+        prof1 = new Profesor(45612485,"capullo","iker","12345678","ikerarcos@msn.com","despacho1");
         asig1.setProfesor(prof1);
         
         //PODRÍA HABER UNIDADES SIN ASIGNATURA
@@ -365,12 +396,12 @@ public class PtDAO implements IPtDao{
 		PtDAO.getInstancia();
 		instancia.session = instancia.factory.openSession();
 		
-		//instancia.inserciones1(); YA NO HACE FALTA, NO SE BORRAN UNA VEZ QUE SE CARGAN LA PRIMERA VEZ
+		//instancia.inserciones1(); //YA NO HACE FALTA, NO SE BORRAN UNA VEZ QUE SE CARGAN LA PRIMERA VEZ
 		
 		instancia.getAsignaturas();
 		//instancia.getAsignaturas();
 		
-		System.out.println(instancia.getAsignatura(1));
+		System.out.println(instancia.getAsignatura(3));
 		
 		
 				
@@ -385,13 +416,13 @@ public class PtDAO implements IPtDao{
 		System.out.println(instancia.loginAlumno(45820650,"soy gay"));
 		System.out.println("");
 		System.out.println("getProfesor por asignatura: ");
-		System.out.println(instancia.getProfesor(1));
+		System.out.println(instancia.getProfesor(3));
 		System.out.println("");
 		
 		//System.out.println("Prueba matricular: ");
-		instancia.matricular(45820650, 1);
+		instancia.matricular(45820650, 3);
 		//Alumnos para asignatura 1
-		Set<Alumno> alum=instancia.getAsignatura(1).getAlumnos();
+		Set<Alumno> alum=instancia.getAsignatura(3).getAlumnos();
 		for (Iterator<Alumno> iter = alum.iterator(); iter.hasNext();) {
 			Alumno alum1 = iter.next();
 	        System.out.println(alum1);
@@ -407,11 +438,11 @@ public class PtDAO implements IPtDao{
 	    	}
 		System.out.println("");
 		System.out.println("getUnidades por asignatura: ");
-		System.out.println(instancia.getUnidades(1));
+		System.out.println(instancia.getUnidades(3));
 		System.out.println("");
 		
 		System.out.println("getProfesor por asignatura: ");
-		System.out.println(instancia.getProfesor(1));
+		System.out.println(instancia.getProfesor(3));
 		System.out.println("");
 		
 		System.out.println("getEvaluacionesOrderedByAsignatura: ");
@@ -498,7 +529,7 @@ public class PtDAO implements IPtDao{
 		
 		System.out.println("desmatricular/matricular: ");
 		//instancia.desmatricular(45820650, 1);
-		instancia.matricular(45820650, 1);
+		instancia.matricular(45820650, 3);
 		
 		System.out.println("getAsignaturas por ID alumno: ");
 		asigs1 = instancia.getAsignaturas(45820650);
@@ -511,7 +542,7 @@ public class PtDAO implements IPtDao{
 		System.out.println("");
 		
 		System.out.println("addEvaluacion por ID alumno: ");
-		instancia.addEvaluacion("Afinidad de Iker con el sexo anal",10,1,45820650);
+		instancia.addEvaluacion("Afinidad de Iker con el sexo anal",10,3,45820650);
 		
 		System.out.println("");
 		System.out.println("getAsignaturasProfesor: ");
