@@ -31,12 +31,14 @@ public class Asignatura {
 		Creditos = creditos;
 		Alumnos = new HashSet<Alumno>();
 		Unidades = new HashSet<Unidad>();
+		Profesor = new Profesor();
 		//Evaluaciones = new HashSet<Evaluacion>();
 	}
 
 	protected Asignatura(){
 		Alumnos = new HashSet<Alumno>();
 		Unidades = new HashSet<Unidad>();
+		Profesor = new Profesor();
 		//Evaluaciones = new HashSet<Evaluacion>();
 	}
 	
