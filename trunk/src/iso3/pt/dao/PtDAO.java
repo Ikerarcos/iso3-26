@@ -339,8 +339,9 @@ public class PtDAO implements IPtDao{
         asig1.addAlumno(alum1);
         cache.remove(idAsignatura);
         cache.put(idAsignatura, asig1);       
-        instancia.session.save(asig1);
-        instancia.session.save(alum1);
+        /*instancia.session.save(asig1);
+        instancia.session.save(alum1);*/
+        instancia.session.flush();
         tx.commit();
         System.out.println("Done matricular!");}
 		else System.out.println("No existe alumno o asignatura");
