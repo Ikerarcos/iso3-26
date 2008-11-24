@@ -75,11 +75,9 @@ public class PtDAO implements IPtDao{
         else
         	{eval.setAlum(alum1);
 	        eval.setAsig(asig1);
-	        //no se puede hacer esto
-	        //asig1.addEvaluacion(eval);
+	        
 	        
 	        alum1.addEvaluacion(eval);
-	        //actualización cache
 	        cache.remove(idAsignatura);
 	        cache.put(idAsignatura, asig1);       
 	        instancia.session.save(asig1);
@@ -142,15 +140,12 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturas() {
-		//COMO HACERLO CON CACHE?
-		//LA PRIMERA PARTE ESTÁ BIEN, EL PROBLEMA ESTÁ CUANDO HAY Q RECORRER SOLO LA CACHÉ
 		
 		Set<Asignatura> AsigSet=null;
 		if (!cacheLlena)
 		{	cacheLlena=true;
 			cache.clear();
 			AsigSet = new HashSet<Asignatura>();
-			//AsigSet = (Set)instancia.session.createQuery("from Asignatura as asig").list(); NO SE PUEDE HACER CAST ASI
 			List<Asignatura> Asigs = instancia.session.createQuery("from Asignatura as asig").list();
 			Asignatura asig = null;
 			
@@ -162,7 +157,7 @@ public class PtDAO implements IPtDao{
 		        	cache.put(asig.getId(), asig);
 		        }
 				AsigSet.add(asig);//Carga del List al Set
-				System.out.println(asig);
+				//System.out.println(asig);
 	        }
 			return AsigSet;
 		}
@@ -339,13 +334,18 @@ public class PtDAO implements IPtDao{
         asig1.addAlumno(alum1);
         cache.remove(idAsignatura);
         cache.put(idAsignatura, asig1);       
-        /*instancia.session.save(asig1);
-        instancia.session.save(alum1);*/
-        instancia.session.flush();
+        instancia.session.save(asig1);
+        instancia.session.save(alum1);
+        
         tx.commit();
         System.out.println("Done matricular!");}
 		else System.out.println("No existe alumno o asignatura");
 	}
+	
+	
+	
+	
+	
 	
 	//Para pruebas iniciales
 	public void inserciones1(){
@@ -366,7 +366,7 @@ public class PtDAO implements IPtDao{
         instancia.session.save(alum1);
         tx.commit();
         
-        instancia.matricular(alum1.getDni(), asig1.getId()); 
+        //instancia.matricular(alum1.getDni(), asig1.getId()); 
         
         tx = instancia.session.beginTransaction();
         Unidad unid1 = new Unidad("Tema1","la homosexualidad de montxo","montxo es gay");
@@ -400,10 +400,9 @@ public class PtDAO implements IPtDao{
 		//instancia.inserciones1(); //YA NO HACE FALTA, NO SE BORRAN UNA VEZ QUE SE CARGAN LA PRIMERA VEZ
 		
 		instancia.getAsignaturas();
-		//instancia.getAsignaturas();
+		instancia.getAsignaturas();
 		
-		System.out.println(instancia.getAsignatura(3));
-		
+				
 		
 				
 		System.out.println("");
@@ -416,14 +415,13 @@ public class PtDAO implements IPtDao{
 		System.out.println("loginAlumno: ");
 		System.out.println(instancia.loginAlumno(45820650,"soy gay"));
 		System.out.println("");
-		System.out.println("getProfesor por asignatura: ");
-		System.out.println(instancia.getProfesor(3));
-		System.out.println("");
 		
-		//System.out.println("Prueba matricular: ");
-		instancia.matricular(45820650, 3);
+		
+		System.out.println("Prueba matricular: ");
+		instancia.matricular(45820650, 1);
+		
 		//Alumnos para asignatura 1
-		Set<Alumno> alum=instancia.getAsignatura(3).getAlumnos();
+		Set<Alumno> alum=instancia.getAsignatura(1).getAlumnos();
 		for (Iterator<Alumno> iter = alum.iterator(); iter.hasNext();) {
 			Alumno alum1 = iter.next();
 	        System.out.println(alum1);
@@ -439,11 +437,11 @@ public class PtDAO implements IPtDao{
 	    	}
 		System.out.println("");
 		System.out.println("getUnidades por asignatura: ");
-		System.out.println(instancia.getUnidades(3));
+		System.out.println(instancia.getUnidades(1));
 		System.out.println("");
 		
 		System.out.println("getProfesor por asignatura: ");
-		System.out.println(instancia.getProfesor(3));
+		System.out.println(instancia.getProfesor(1));
 		System.out.println("");
 		
 		System.out.println("getEvaluacionesOrderedByAsignatura: ");
@@ -479,16 +477,6 @@ public class PtDAO implements IPtDao{
 		System.out.println("");
 		
 		
-		
-		/*System.out.println("getAsignaturasProfesor por ID de profesor: ");
-		Set<Asignatura> asigs=instancia.getAsignaturasProfesor(1);
-		
-		for (Iterator<Asignatura> iter = asigs.iterator(); iter.hasNext();) 
-		{
-			Asignatura emp1 = iter.next();
-			System.out.println(emp1);
-    	}
-		*/
 		
 		System.out.println("");
 		
@@ -530,7 +518,7 @@ public class PtDAO implements IPtDao{
 		
 		System.out.println("desmatricular/matricular: ");
 		//instancia.desmatricular(45820650, 1);
-		instancia.matricular(45820650, 3);
+		//instancia.matricular(45820650, 3);
 		
 		System.out.println("getAsignaturas por ID alumno: ");
 		asigs1 = instancia.getAsignaturas(45820650);
@@ -543,7 +531,7 @@ public class PtDAO implements IPtDao{
 		System.out.println("");
 		
 		System.out.println("addEvaluacion por ID alumno: ");
-		instancia.addEvaluacion("Afinidad de Iker con el sexo anal",10,3,45820650);
+		instancia.addEvaluacion("Afinidad de Iker con el sexo anal",10,1,45820650);
 		
 		System.out.println("");
 		System.out.println("getAsignaturasProfesor: ");

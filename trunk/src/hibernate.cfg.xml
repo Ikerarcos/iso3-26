@@ -12,7 +12,7 @@
         
         <property name="dialect">org.hibernate.dialect.MySQLDialect</property>
         
-        <!-- Quitado: 
+        <!-- 
         <property name="hbm2ddl.auto">create</property>
         -->
         
