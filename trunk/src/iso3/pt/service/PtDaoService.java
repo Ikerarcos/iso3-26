@@ -17,7 +17,7 @@ public class PtDaoService implements PtService {
     private PtDAO dao;
 
     public PtDaoService() {
-        this.dao = PtDAO.getInstance();
+        this.dao = PtDAO.getInstancia();
     }
 	
 	public Set<Asignatura> getAsignaturas() {
