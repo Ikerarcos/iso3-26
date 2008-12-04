@@ -5,9 +5,12 @@
     <property name="source.dir" value="src"/>
     <property name="build.dir" value="bin"/>
     <property name="lib.dir" value="lib"/>
-    <property name="hibernate.dir" value="C:\ISO\hibernate-3.2"/>
+    <property name="hibernate.dir" location="C:\ISO\hibernate-3.2"/>
     <property name="project.file" value="gestorUD_ISO3-26"/>
     <property name="dist.dir" value="dist"/>
+    <property name="conf.dir" value="conf"/>
+    <property name="tomcat.home" location="C:\apache-tomcat-6.0.18"/>
+    
     
 	<path id="classpath">
         <pathelement path="${build.dir}"/>
@@ -25,6 +28,8 @@
 	
     <target name="prepare" depends="clean">
     	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${dist.dir}"/>
+    	<mkdir dir="${conf.dir}"/>
     </target>
  
     <target name="build" depends="prepare">
