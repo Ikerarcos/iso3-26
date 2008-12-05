@@ -5,7 +5,6 @@
     <property name="source.dir" value="src"/>
     <property name="build.dir" value="bin"/>
     <property name="lib.dir" value="lib"/>
-    <property name="hibernate.dir" location="C:\ISO\hibernate-3.2"/>
     <property name="project.file" value="gestorUD_ISO3-26"/>
     <property name="dist.dir" value="dist"/>
     <property name="conf.dir" value="conf"/>
@@ -14,12 +13,14 @@
     
 	<path id="classpath">
         <pathelement path="${build.dir}"/>
+        
         <fileset dir="${lib.dir}">
             <include name="*.jar"/>
         </fileset>
-        <fileset dir="${hibernate.dir}">
-            <include name="**/*.jar"/>
+        <fileset dir="${conf.dir}">
+            <include name="**/*.xml"/>
         </fileset>
+        
     </path>
 	
     <target name="clean">
@@ -44,11 +45,19 @@
                 <include name="**/*.xml"/>
             	<include name="**/*.properties"/>
             </fileset>
+            
+            <fileset dir="${conf.dir}">
+                <include name="**/*.xml"/>
+            	<include name="**/*.properties"/>
+				<exclude name="**/web.xml"/>
+				<exclude name="**/hibernate.cfg.xml"/>
+            </fileset>
+            
     	</copy>
     </target>
 	
     <target name="test" depends="build">
-        <java classname="iso3.pt.dao.PtDAO" fork="true">
+        <java classname="iso3.pt.dao.PtDAO"  fork="true">
             <classpath>
                 <path refid="classpath"/>
             </classpath>
