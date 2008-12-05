@@ -24,6 +24,7 @@
 	
     <target name="clean">
         <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
     </target>
 	
     <target name="prepare" depends="clean">

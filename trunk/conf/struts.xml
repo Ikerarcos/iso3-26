@@ -3,7 +3,7 @@
 	"http://struts.apache.org/dtds/struts-2.0.dtd">
 <struts>
 	<!-- Configuration for the default package. -->
-	<package name="default" extends="struts-default">
+	<package name="default" namespace="/*" extends="struts-default">
 		
 		<!-- Default interceptor stack. -->
 		<default-interceptor-ref name="paramsPrepareParamsStack"/>
