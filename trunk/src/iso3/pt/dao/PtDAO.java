@@ -55,6 +55,9 @@ public class PtDAO implements IPtDao{
 		if (instancia == null) {
 				instancia = new PtDAO();
 				instancia.cacheLlena = false;
+				instancia.session = instancia.factory.openSession();
+				//PARA LA WEB, ABRE INSTANCIA LA PRIMERA VEZ, CUANDO CIERRA?
+				//UN ABRIR/CERRAR SESSION POR FUNCION?¿
 		}
 		return instancia;
 	}
@@ -276,7 +279,7 @@ public class PtDAO implements IPtDao{
 	public Alumno loginAlumno(int dni, String pass)
 			throws UserNotFoundException, IncorrectPasswordException {
 		
-		
+		System.out.println("loginAlumno de PtDAO");
 		Alumno alum1  = (Alumno) instancia.session.get(Alumno.class, dni);
 		if (alum1 != null)
 			if (alum1.getPassword().equals(pass))
@@ -291,7 +294,7 @@ public class PtDAO implements IPtDao{
 				}
 		else
 			{
-			new UserNotFoundException(); 
+			new UserNotFoundException();
 			return null;
 			}
 	}
