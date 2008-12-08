@@ -25,7 +25,7 @@
 			<result  name="listLecturerSubjects">/jsp/lecturerSubjects.jsp</result>
         </action>
         
-        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="LecturerAction">
+        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="prepare">
 			<result  name="success">/jsp/lecturerSubjects.jsp</result>
             
         </action>
