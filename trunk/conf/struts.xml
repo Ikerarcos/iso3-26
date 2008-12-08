@@ -13,16 +13,45 @@
 
 
 		<!-- Login Form Configuration -->
-        <action name="showLogin">
+        <action name="showLogin" class="iso3.pt.action.ShowLoginAction">
 			<result>/jsp/login.jsp</result>
         </action>
-		<action name="login" class="iso3.pt.action.LoginAction" method="login">
+        
+		<action name="doLogin" class="iso3.pt.action.LoginAction" method="login">
 			<result  name="success">/jsp/login.jsp</result>
             <result  name="input">/jsp/login.jsp</result>
 			<result  name="error">/jsp/error.jsp</result>
 			<result  name="listStudentSubjects">/jsp/studentSubjects.jsp</result>
 			<result  name="listLecturerSubjects">/jsp/lecturerSubjects.jsp</result>
         </action>
+        
+        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="LecturerAction">
+			<result  name="success">/jsp/lecturerSubjects.jsp</result>
+            
+        </action>
+        
+        <!--<action name="doStudentAction" class="iso3.pt.action.StudentAction" method="StudentAction">
+			<result  name="success">/jsp/studentSubjects.jsp</result>
+            
+        </action>-->
+        
+        <action name="doSubjectAction" class="iso3.pt.action.SubjectAction" method="SubjectAction">
+			<result  name="success">/jsp/studentSubjects.jsp</result>
+            
+        </action>
+        
+        <!--<action name="doSubjectMarkingAction class="iso3.pt.action.SubjectMarkingAction" method="SubjectMarkingAction">
+			<result  name="success">/jsp/studentSubjects.jsp</result>
+            
+        
+      	</action>-->
+        
+        
+        
+        
+        
+        
+        
         
     </package>
 
