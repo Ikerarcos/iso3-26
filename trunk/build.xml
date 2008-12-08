@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project basedir="." default="deploy" name="ISO3-26">
+	<property environment="env"/>
+    <property name="source.dir" value="src"/>
+    <property name="build.dir" value="bin"/>
+    <property name="lib.dir" value="lib"/>
+    <property name="project.file" value="gestorUD_ISO3-26"/>
+    <property name="dist.dir" value="dist"/>
+    <property name="conf.dir" value="conf"/>
+    <property name="tomcat.home" value="${env.TOMCAT_HOME}"/>
+    
+    
+	<path id="classpath">
+        <pathelement path="${build.dir}"/>
+        
+        <fileset dir="${lib.dir}">
+            <include name="*.jar"/>
+        </fileset>
+        <fileset dir="${conf.dir}">
+            <include name="**/*.xml"/>
+        </fileset>
+        
+    </path>
+	
+    <target name="clean" depends="undeploy">
+        <delete dir="${build.dir}"/>
+        <delete dir="${dist.dir}"/>
+    </target>
+	
+    <target name="prepare" depends="clean">
+    	<mkdir dir="${build.dir}"/>
+    	<mkdir dir="${dist.dir}"/>
+    	<mkdir dir="${conf.dir}"/>
+    	
+    	<!--HAY Q CONSEGUIR QUE SE EJECUTE EN VENTANA NUEVA
+    	<exec executable="start ${tomcat.home}/bin/startup.bat"/>-->
+    </target>
+ 
+    <target name="build" depends="prepare">
+        <javac srcdir="${source.dir}" destdir="${build.dir}" deprecation="true" fork="true">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </javac>
+    	<copy todir="${build.dir}">
+            <fileset dir="${source.dir}">
+                <include name="**/*.xml"/>
+            	<include name="**/*.properties"/>
+            </fileset>
+            
+            <fileset dir="${conf.dir}">
+                <include name="**/*.xml"/>
+            	<include name="**/*.properties"/>
+				<exclude name="**/web.xml"/>
+				<exclude name="**/hibernate.cfg.xml"/>
+            </fileset>
+            
+    	</copy>
+    </target>
+	
+    <target name="test" depends="build">
+        <java classname="iso3.pt.dao.PtDAO"  fork="true">
+            <classpath>
+                <path refid="classpath"/>
+            </classpath>
+        </java>
+    </target>
+    <target name="help">
+		<echo>Usage: ant [build | test | clean]</echo>
+	</target>
+	
+	
+	<target name="jar" depends="build">
+		<jar destfile="${dist.dir}/${project.file}.jar">
+            <fileset dir="${build.dir}"/>
+            <manifest>
+                <attribute name="Built-By" value="University of Deusto"/>
+            </manifest>
+        </jar>
+	</target>
+	
+    <target name="war" depends="jar">
+		<copy file="${dist.dir}/${project.file}.jar" todir="${lib.dir}"/>
+		<war	
+			warfile="${dist.dir}/${project.file}.war"
+			webxml="${conf.dir}/web.xml">
+			<exclude name="${dist.dir}/${project.distname}.war"/>
+			<lib dir="${lib.dir}"/>
+			<zipfileset dir="css" prefix="css"/>
+			<zipfileset dir="jsp" prefix="jsp"/>
+			<zipfileset dir="html"/>
+		</war>
+		 <delete file="${lib.dir}/${project.file}.jar"/>
+    </target>
+	
+	<target name="deploy" depends="war">
+		<copy file="${dist.dir}/${project.file}.war" todir="${tomcat.home}/webapps"/>
+		<exec executable="${tomcat.home}/bin/startup.bat"/>
+    </target>
+	
+	<target name="undeploy">
+		<delete file="${tomcat.home}/webapps/${project.file}.war"/>
+		<delete dir="${tomcat.home}/webapps/${project.file}"/>
+    </target>
+</project>
