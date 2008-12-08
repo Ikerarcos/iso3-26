@@ -7,8 +7,8 @@
 		
 	</head>
 	<body>
-		<div class="titleDiv"><s:text name="application.title"/></div></title>
-		<h1><s:text name="label.login.title"/></h1>
+		<div class="titleDiv"><s:text name="application.title"/></div>
+		</title><h1><s:text name="label.login.title"/></h1>
 		<s:form action="doLogin!doLogin" method="login">
 			
 			<tr>
@@ -20,6 +20,7 @@
 			<s:textfield name="username" label="%{getText('label.login.name')}"/>
 			<s:password name="password" label="%{getText('label.login.password')}"/>
 			<s:select name="selectedrol.fullName" list="roles" listKey="fullName" listValue="fullName" label="%{getText('label.roles.select')}"/>
+			<!--<% session.putValue("rol",request.getParameter("username")); %>-->
 			<s:submit value="%{getText('label.login.button')}" align="center"/>
 		</s:form>
 		
