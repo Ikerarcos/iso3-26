@@ -146,7 +146,8 @@ public class PtDAO implements IPtDao{
 		
 		Set<Asignatura> AsigSet=null;
 		if (!cacheLlena)
-		{	cacheLlena=true;
+		{	System.out.println("cacheLlena false");
+			cacheLlena=true;
 			cache.clear();
 			AsigSet = new HashSet<Asignatura>();
 			List<Asignatura> Asigs = instancia.session.createQuery("from Asignatura as asig").list();
@@ -158,15 +159,18 @@ public class PtDAO implements IPtDao{
 				if (!cache.containsKey(asig.getId())){        	
 		        	asig = (Asignatura) instancia.session.get(Asignatura.class, asig.getId());
 		        	cache.put(asig.getId(), asig);
+		        	
+		        	
 		        }
-				AsigSet.add(asig);//Carga del List al Set
+				AsigSet.add(asig);
+				System.out.println(asig);//Carga del List al Set
 				//System.out.println(asig);
 	        }
 			return AsigSet;
 		}
 		else 
 			
-		{	
+		{	System.out.println("cacheLlena true");
 			Collection<Asignatura> col = cache.values();
 			AsigSet = new HashSet<Asignatura>();
 			for (Iterator<Asignatura> iter = col.iterator(); iter.hasNext();) 
@@ -196,7 +200,7 @@ public class PtDAO implements IPtDao{
 
 	@Override
 	public Set<Asignatura> getAsignaturasProfesor(int idProfesor) {
-		
+		System.out.println("DAO: getAsignaturasProfesor");
 		Set<Asignatura> asigsProf = new HashSet<Asignatura>();
 		Set<Asignatura> asigs = new HashSet<Asignatura>();
 		asigs =instancia.getAsignaturas();
@@ -204,8 +208,11 @@ public class PtDAO implements IPtDao{
 		for(Iterator<Asignatura> iter = asigs.iterator(); iter.hasNext();){
 			asig = iter.next();
 			if (asig.getProfesor() !=null )
-				if(  (asig.getProfesor().getDni() == idProfesor))
+				if(  (asig.getProfesor().getId() == idProfesor))
+					{
 					asigsProf.add(asig);
+					System.out.println(asig);
+					}
 		}
 		return asigsProf;
         
@@ -408,7 +415,7 @@ public class PtDAO implements IPtDao{
 				
 		
 				
-		System.out.println("");
+		/*System.out.println("");
 		System.out.println("getProfesorByDni: ");
 		System.out.println(instancia.getProfesorByDni(45612485));
 		System.out.println("");
@@ -543,7 +550,7 @@ public class PtDAO implements IPtDao{
 		{
 			Asignatura emp1 = iter.next();
 			System.out.println(emp1);
-    	}
+    	}*/
 		
 		
 		
