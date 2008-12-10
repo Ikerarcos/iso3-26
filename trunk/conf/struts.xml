@@ -21,19 +21,20 @@
 			<result  name="success">/jsp/login.jsp</result>
             <result  name="input">/jsp/login.jsp</result>
 			<result  name="error">/jsp/error.jsp</result>
-			<result  name="listStudentSubjects">/jsp/studentSubjects.jsp</result>
-			<result  name="listLecturerSubjects">/jsp/lecturerSubjects.jsp</result>
+			<result  name="listStudentSubjects" type="redirectAction">doStudentAction</result>
+			<result  name="listLecturerSubjects" type="redirectAction">doLecturerAction</result>
         </action>
         
-        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="prepare">
-			<result  name="success">/jsp/lecturerSubjects.jsp</result>
+        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="listing">
+			<result name="success">/jsp/lecturerSubjects.jsp</result>
+			<result name="studentslist">/jsp/studentSubjects.jsp</result>
             
         </action>
         
-        <!--<action name="doStudentAction" class="iso3.pt.action.StudentAction" method="StudentAction">
+        <action name="doStudentAction" class="iso3.pt.action.StudentAction" method="StudentAction">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
             
-        </action>-->
+        </action>
         
         <action name="doSubjectAction" class="iso3.pt.action.SubjectAction" method="SubjectAction">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
