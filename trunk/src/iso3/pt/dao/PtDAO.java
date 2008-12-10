@@ -120,7 +120,9 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Set<Alumno> getAlumnos(int idAsignatura) {
 		// TODO Auto-generated method stub
+		System.out.println("getAlumnos en DAO");
 		Asignatura asig1 = instancia.getAsignatura(idAsignatura);
+		System.out.println(asig1);
 		if (asig1!=null)
 			return asig1.getAlumnos();
 		else return null;
@@ -129,6 +131,7 @@ public class PtDAO implements IPtDao{
 	@Override
 	public Asignatura getAsignatura(int id) {
 		// TODO Auto-generated method stub
+		System.out.println("DAO getAsignatura");
 		Asignatura asig1 = null;
 		if (cache.containsKey(id))
         	asig1 = cache.get(id);
@@ -137,6 +140,7 @@ public class PtDAO implements IPtDao{
         	if (asig1!=null)
         		cache.put(id, asig1);
         }
+		System.out.println("sale de getAsignatura");
 		return asig1;
         
 	}
@@ -502,7 +506,7 @@ public class PtDAO implements IPtDao{
 		
 		System.out.println("");
 		
-		
+		*/
 		
 		System.out.println("getAlumnos por ID asig: ");
 		Set<Alumno> alumns = new HashSet<Alumno>();
@@ -517,7 +521,7 @@ public class PtDAO implements IPtDao{
 		
 		System.out.println("");
 		
-		
+		/*
 		
 		System.out.println("getAlumno por ID alumno: ");
 		System.out.println(instancia.getAlumno(45820650));
