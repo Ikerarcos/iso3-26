@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+    <class name="iso3.pt.model.Alumno" table="ALUMNO">
+
+        <id name="Dni" column="ALUM_DNI">
+            <generator class="assigned"/>
+        </id>
+
+        <property name="Password" column="ALUM_PASSWORD"  />
+        <property name="Nombre" column="ALUM_NOMBRE" not-null="true"/>
+        <property name="Telefono" column="ALUM_TELEFONO" />
+        
+       <set name="Evaluaciones" lazy="true" cascade="all" inverse="true">
+			<key column="ALUM_DNI"/>
+			<one-to-many class="iso3.pt.model.Evaluacion"/>
+		</set>
+		
+		<set name="Asignaturas" table="MATRICULADO" lazy="true" inverse="true">
+			<key column="ALUM_DNI"/>
+			<many-to-many column="ASIG_ID" class="iso3.pt.model.Asignatura"/>
+		</set>
+		
+
+    </class>
+
+</hibernate-mapping>
