@@ -131,7 +131,7 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 	public String getIdasig() {
 		return idasig;
 	}
-    
 
+	
 	
 }
