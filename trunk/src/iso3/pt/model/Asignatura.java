@@ -35,7 +35,7 @@ public class Asignatura {
 		//Evaluaciones = new HashSet<Evaluacion>();
 	}
 
-	protected Asignatura(){
+	public Asignatura(){
 		Alumnos = new HashSet<Alumno>();
 		Unidades = new HashSet<Unidad>();
 		Profesor = new Profesor();

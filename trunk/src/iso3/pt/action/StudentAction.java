@@ -25,7 +25,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	private PtDaoService DAO=null;
 	private Alumno alum=null;
 	private List<Asignatura> asiglist =null;
-	private List<Asignatura> asiglistmatric =null;
+	private List<Subject> asiglistmatric =null;
 	private String idasig = null;
 	private Asignatura asigmatric = null;
 	private Subject subject =null;
@@ -100,12 +100,12 @@ public  class StudentAction  extends ActionSupport implements Preparable{
     	
     }
     
-    public String listaMatricular()
+    public String doListaMatricular()
     {
     	System.out.println("listaMatricular");
     	//SOLO METE EN LA LISTA LAS ASIGS EN LAS Q NO STA MATRIC
     	Set<Asignatura> asigset= DAO.getAsignaturas();
-    	asiglistmatric = new ArrayList<Asignatura>();
+    	asiglistmatric = new ArrayList<Subject>();
     	System.out.println("obtiene lista");
     	boolean matric=false;
     	for (Iterator<Asignatura> iter = asigset.iterator(); iter.hasNext();) 
@@ -126,26 +126,36 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	    	if (!matric)
 	    	{	
 	    		System.out.println("no matriculado");
-	    		asiglistmatric.add(asig);
+	    		asiglistmatric.add(new Subject(asig.getNombre(),asig.getId()));
 	    		System.out.println(asig);
 	    	}
     	}
     	if (this.getSubject() != null ) {
 			for (int i=0;i< asiglistmatric.size();i++) {
-				if (asiglistmatric.get(i).getNombre().equals(this.subject.getAsig().getNombre())) {
-					this.subject.setAsig(asiglistmatric.get(i));
+				if (asiglistmatric.get(i).getName().equals(this.subject.getName())) {
+					this.subject.setName(asiglistmatric.get(i).getName());
+					this.subject.setId(asiglistmatric.get(i).getId());
 					break;
 				}
 			}
+			System.out.println("subject");
+	    	System.out.println(this.subject.getName());
 		}
+    	System.out.println("final listaasignaturasmatricular");
     	return "listaasignaturasmatricular";
     }
     
-    public String matricular()
+    public String doMatricular()
     {
     	System.out.println("matricular");
-    	System.out.println(getSubject().getAsig());
-    	DAO.matricular(alum.getDni(), getSubject().getAsig().getId());
+    	System.out.println(getSubject());
+    	System.out.println(alum.getDni());
+    	System.out.println(getSubject().getId());
+    	
+    	DAO.matricular(alum.getDni(), getSubject().getId());
+    	ActionContext.getContext().getSession().remove("alum");
+    	alum = (Alumno)DAO.getAlumno(alum.getDni());
+    	ActionContext.getContext().getSession().put("alum",alum);
     	System.out.println("matriculado");
     	try {
 			prepare();
@@ -153,20 +163,19 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	return "SUCCESS";
+    	return SUCCESS;
     }
 
 
-	public void setAsiglistmatric(List<Asignatura> asiglistmatric) {
+	public void setAsiglistmatric(List<Subject> asiglistmatric) {
 		this.asiglistmatric = asiglistmatric;
 	}
 
 
-	public List<Asignatura> getAsiglistmatric() {
+	public List<Subject> getAsiglistmatric() {
 		System.out.println("getAsiglistmatric");
 		for (int i=0;i<asiglistmatric.size();i++)
 			System.out.println(asiglistmatric.get(i));
-			System.out.println(getSubject().getAsig());
 		
 		return asiglistmatric;
 	}
