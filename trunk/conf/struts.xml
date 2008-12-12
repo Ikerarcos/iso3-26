@@ -33,6 +33,7 @@
         
         <action name="doStudentAction" class="iso3.pt.action.StudentAction" method="listing">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
+			<result  name="listaasignaturasmatricular">/jsp/StudentSubjectRegistrationForm.jsp</result>
             
         </action>
         
