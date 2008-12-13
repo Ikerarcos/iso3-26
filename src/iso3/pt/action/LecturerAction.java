@@ -21,8 +21,8 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 	private PtDaoService DAO=null;
 	private PtService service = null;
 	private Profesor profe =null;
-	private List<Asignatura> asigs =null;
-	private List<Alumno> alumnos =null;
+	private Set<Asignatura> asigs =null;
+	private Set<Alumno> alumnos =null;
 	private String idasig = null;
 	private int numunidades = 0;
 	private int numalumnos = 0;
@@ -42,7 +42,7 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
     	
     }
     
-    public void setAsigs(List<Asignatura> asigs) {
+    public void setAsigs(Set<Asignatura> asigs) {
 		this.asigs = asigs;
 	}
 
@@ -51,16 +51,9 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 		
 		if (getAsigs()==null)
 		{	System.out.println(profe);
-			setAsigs(new ArrayList<Asignatura>());
-			Set<Asignatura> asigset=DAO.getAsignaturasProfesor(profe.getId());
-			System.out.println("Generar listado asigs de set a list");
-			for (Iterator<Asignatura> iter = asigset.iterator(); iter.hasNext();) 
-			{
-				Asignatura asig = iter.next();
-				getAsigs().add(asig);
-				
-				System.out.println(asig);
-	    	}
+			
+			asigs=DAO.getAsignaturasProfesor(profe.getId());
+			
 		}
 		return SUCCESS;
 	}
@@ -91,15 +84,15 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 		return profe;
 	}
 
-	public List<Asignatura> getAsigs() {
+	public Set<Asignatura> getAsigs() {
 		return asigs;
 	}
 
-	public void setAlumnos(List<Alumno> alumnos) {
+	public void setAlumnos(Set<Alumno> alumnos) {
 		this.alumnos = alumnos;
 	}
 
-	public List<Alumno> getAlumnos() {
+	public Set<Alumno> getAlumnos() {
 		return alumnos;
 	}
 
@@ -109,17 +102,15 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 	public String listAlumnos()//PROVISIONAL
 	{
 		System.out.println("listalumnos");
-		if (DAO==null) System.out.println("dao null");
-		setAlumnos(new ArrayList<Alumno>());
-		Set<Alumno> alumset=DAO.getAlumnos(Integer.parseInt(idasig));
-		for (Iterator<Alumno> iter = alumset.iterator(); iter.hasNext();) 
-		{
-			Alumno alumno = iter.next();
-			getAlumnos().add(alumno);
-			
-			System.out.println(alumno);
-    	}
-		System.out.println("students");
+		System.out.println(idasig);
+		alumnos=DAO.getAlumnos(Integer.parseInt(idasig));
+		System.out.println("listado");
+		for (Iterator<Alumno> iterator = alumnos.iterator(); iterator.hasNext(); )
+		{	Alumno alum=iterator.next();
+			System.out.println(alum);
+		}
+		
+		
 		return "studentslist";
 		
 	}
