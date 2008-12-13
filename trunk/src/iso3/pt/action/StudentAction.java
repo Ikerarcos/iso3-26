@@ -29,6 +29,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	private String idasig = null;
 	private Asignatura asigmatric = null;
 	private Subject subject =null;
+	private String name =null;
 
 	@Override
 	public void prepare() throws Exception {
@@ -148,6 +149,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
     public String doMatricular()
     {
     	System.out.println("matricular");
+    	System.out.println(name);
     	System.out.println(getSubject());
     	System.out.println(alum.getDni());
     	System.out.println(getSubject().getId());
@@ -192,12 +194,23 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 
 
 	public void setSubject(Subject subject) {
+		System.out.println("setSubject");
 		this.subject = subject;
 	}
 
 
 	public Subject getSubject() {
 		return subject;
+	}
+
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+
+	public String getName() {
+		return name;
 	}
     
     

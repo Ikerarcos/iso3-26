@@ -9,12 +9,17 @@
 	<s:actionerror/>
 	<div class="titleDiv"><s:text name="application.title"/></div>
 	<h1><s:text name="label.student.title"/><s:property value="alum.Nombre"/>(<s:property value="alum.Dni"/>)</h1>
+	
 	<s:url action="doStudentAction!listaMatricular"  id="listaMatricular" escapeAmp="false">
-	</s:url>
+	</s:url>	
 	<a href="<s:property value="#listaMatricular"/>"><s:text name="label.studentmatric.button"/></a>       
-	<s:url action="doLogin!doLogOut"  id="logout" escapeAmp="false">
+	
+	<s:url action="doSubjectAction!doMostrarNotas"  id="mostrarnotas" escapeAmp="false">
+		<s:param name="idalumno" value="alum.Dni"/>
 	</s:url>
-	<a href="<s:property value="#logout"/>"><s:text name="label.studentnotas.button"/></a>       
+	
+	<a href="<s:property value="#mostrarnotas"/>"><s:text name="label.studentnotas.button"/></a>       
+	
 	<s:url action="doLogin!doLogOut"  id="logout" escapeAmp="false">
 	</s:url>
 	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>

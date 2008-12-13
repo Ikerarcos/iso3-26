@@ -13,7 +13,9 @@
 		<s:form action="doStudentAction!doMatricular" >
 			<s:select name="subject.id" list="asiglistmatric" listKey="name" listValue="name" label="%{getText('label.matric.select')}"/>
 			
-			<s:submit value="%{getText('label.login.button')}" align="center"/>
+			<s:submit value="%{getText('button.label.submit')}" />
+		    <s:submit value="%{getText('button.label.cancel')}" name="redirect-action:doStudentAction"/>
+		
 		</s:form>
 		
 	</body>

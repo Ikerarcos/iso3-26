@@ -4,6 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
 
@@ -26,12 +27,15 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	private int idalumno=0;
 	private int idasig = 0;
 	private Set<Evaluacion >setnotas =null;
+	private Set<Evaluacion >setallnotas =null;
 	
 	@Override
 	public void prepare() throws Exception {
 		System.out.println("prepare subject");
+		System.out.println(idalumno);
 		DAO =new PtDaoService();
-		
+		alum=DAO.getAlumno(idalumno);
+		System.out.println(alum);
 		
 	}
 
@@ -45,13 +49,7 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 		
 	}
 	
-	public String notas()
-	{	setAlum(DAO.getAlumno(idalumno));
-		setAsig(DAO.getAsignatura(idasig));
-		setSetnotas(DAO.getEvaluaciones(idasig, idalumno));
-		return SUCCESS;
-		
-	}
+
 
     
     
@@ -97,7 +95,13 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	}
 
 
-
+	public String doMostrarNotas()
+	{
+		setSetallnotas(alum.getEvaluaciones());
+		
+		return "mostrarnotas";
+		
+	}
 	
 
 
@@ -110,5 +114,17 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	public Set<Evaluacion > getSetnotas() {
 		System.out.println("getSetnotas");
 		return setnotas;
+	}
+
+
+
+	public void setSetallnotas(Set<Evaluacion > setallnotas) {
+		this.setallnotas = setallnotas;
+	}
+
+
+
+	public Set<Evaluacion > getSetallnotas() {
+		return setallnotas;
 	}
 }

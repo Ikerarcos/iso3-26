@@ -33,12 +33,14 @@
         
         <action name="doStudentAction" class="iso3.pt.action.StudentAction" method="listing">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
+			<!--<result  name="input" type="redirectAction>doStudentAction</result>-->
 			<result  name="listaasignaturasmatricular">/jsp/StudentSubjectRegistrationForm.jsp</result>
-            
+            <result >/jsp/studentSubjects.jsp</result>
         </action>
         
         <action name="doSubjectAction" class="iso3.pt.action.SubjectAction" method="listing">
 			<result  name="success">/jsp/studentSubjectMarks.jsp</result>
+			<result name="mostrarnotas">/jsp/StudentAllSubjectsMarks.jsp</result>
             
         </action>
         
