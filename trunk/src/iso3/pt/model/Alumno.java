@@ -60,13 +60,13 @@ public class Alumno {
 	/**
 	 * @param nombre the nombre to set
 	 */
-	private void setNombre(String nombre) {
+	public void setNombre(String nombre) {
 		Nombre = nombre;
 	}
 	/**
 	 * @return the nombre
 	 */
-	private String getNombre() {
+	public String getNombre() {
 		System.out.println("getnombre en alumno");
 		System.out.println(Nombre);
 		return Nombre;

@@ -27,7 +27,7 @@
         
         <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="listing">
 			<result name="success">/jsp/lecturerSubjects.jsp</result>
-			<result name="studentslist">/jsp/studentSubjects.jsp</result>
+			<result name="studentslist">/jsp/SubjectStudents.jsp</result>
             
         </action>
         

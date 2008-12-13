@@ -37,7 +37,7 @@
 		            <td class="nowrap"><s:property value="profe.numalumnos"/></td>
 		            <td class="nowrap">
 		            <s:url action="doLecturerAction!listAlumnos"  id="studentslist" escapeAmp="false">
-		            <s:param name="idasig" value="%{ Id }"/>
+		            	<s:param name="idasig" value="%{ Id }"/>
 					</s:url>
 					<a href="<s:property value="#studentslist"/>"><s:text name="label.lecturer.button"/></a></td>
 		        </tr>
