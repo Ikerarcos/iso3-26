@@ -14,7 +14,7 @@ public class Alumno {
 
 	private int Dni;//asignado por usuario
 	private String Password;
-	private String Nombre;//not null
+	private String Nombre;
 	private String Telefono;
 	
 	private Set<Asignatura> Asignaturas;//carga lazy
