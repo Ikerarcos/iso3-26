@@ -24,7 +24,7 @@ public class Evaluacion {
 		Nota = nota;
 		Asignatura = asig;
 	}
-	protected Evaluacion(){
+	public Evaluacion(){
 		
 	}
 	/**

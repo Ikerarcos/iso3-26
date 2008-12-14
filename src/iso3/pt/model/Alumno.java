@@ -67,8 +67,7 @@ public class Alumno {
 	 * @return the nombre
 	 */
 	public String getNombre() {
-		System.out.println("getnombre en alumno");
-		System.out.println(Nombre);
+		
 		return Nombre;
 	}
 	/**
