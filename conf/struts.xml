@@ -17,38 +17,38 @@
 			<result>/jsp/login.jsp</result>
         </action>
         
-		<action name="doLogin" class="iso3.pt.action.LoginAction" method="login">
+		<action name="loginAction" class="iso3.pt.action.LoginAction" method="login">
 			<result  name="success">/jsp/login.jsp</result>
             <result  name="input">/jsp/login.jsp</result>
 			<result  name="error">/jsp/error.jsp</result>
-			<result  name="listStudentSubjects" type="redirectAction">doStudentAction</result>
-			<result  name="listLecturerSubjects" type="redirectAction">doLecturerAction</result>
+			<result  name="listStudentSubjects" type="redirectAction">studentAction</result>
+			<result  name="listLecturerSubjects" type="redirectAction">lecturerAction</result>
         </action>
         
-        <action name="doLecturerAction" class="iso3.pt.action.LecturerAction" method="listing">
+        <action name="lecturerAction" class="iso3.pt.action.LecturerAction" method="listing">
 			<result name="success">/jsp/lecturerSubjects.jsp</result>
 			<result name="studentslist">/jsp/SubjectStudents.jsp</result>
             
         </action>
         
-        <action name="doStudentAction" class="iso3.pt.action.StudentAction" method="listing">
+        <action name="studentAction" class="iso3.pt.action.StudentAction" method="listing">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
-			<!--<result  name="input" type="redirectAction>doStudentAction</result>-->
+			<!--<result  name="input" type="redirectAction>studentAction</result>-->
 			<result  name="listaasignaturasmatricular">/jsp/StudentSubjectRegistrationForm.jsp</result>
             <result >/jsp/studentSubjects.jsp</result>
         </action>
         
-        <action name="doSubjectAction" class="iso3.pt.action.SubjectAction" method="listing">
+        <action name="subjectAction" class="iso3.pt.action.SubjectAction" method="listing">
 			<result  name="success">/jsp/studentSubjectMarks.jsp</result>
 			<result name="mostrarnotas">/jsp/StudentAllSubjectsMarks.jsp</result>
             
         </action>
         
-        <!--<action name="doSubjectMarkingAction class="iso3.pt.action.SubjectMarkingAction" method="SubjectMarkingAction">
-			<result  name="success">/jsp/studentSubjects.jsp</result>
+        <action name="subjectMarkingAction" class="iso3.pt.action.SubjectMarkingAction">
+			<result  name="success">/jsp/StudentSubjectMarkingForm.jsp</result>
             
         
-      	</action>-->
+      	</action>
         
         
         

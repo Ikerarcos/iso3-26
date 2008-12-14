@@ -19,13 +19,11 @@ import iso3.pt.model.*;
 public  class LecturerAction  extends ActionSupport implements Preparable{
 
 	private PtDaoService DAO=null;
-	private PtService service = null;
 	private Profesor profe =null;
 	private Set<Asignatura> asigs =null;
 	private Set<Alumno> alumnos =null;
 	private String idasig = null;
-	private int numunidades = 0;
-	private int numalumnos = 0;
+	private Asignatura asig = null;
 
     
     
@@ -58,9 +56,7 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 		return SUCCESS;
 	}
 
-	public void setNumunidades(int numunidades) {
-		this.numunidades = numunidades;
-	}
+
 
 	public int getNumunidades(int id) {
 		
@@ -68,13 +64,7 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 		return DAO.getUnidades(id).size();
 	}
 
-	public void setnumalumnos(int numalumnos) {
-		this.numalumnos = numalumnos;
-	}
 
-	public int getnumalumnos() {
-		return numalumnos;
-	}
 	
 	public void setProfe(Profesor profe) {
 		this.profe = profe;
@@ -103,7 +93,8 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 	{
 		System.out.println("listalumnos");
 		System.out.println(idasig);
-		alumnos=DAO.getAlumnos(Integer.parseInt(idasig));
+		asig = DAO.getAsignatura(Integer.parseInt(idasig));
+		alumnos=asig.getAlumnos();
 		System.out.println("listado");
 		for (Iterator<Alumno> iterator = alumnos.iterator(); iterator.hasNext(); )
 		{	Alumno alum=iterator.next();
@@ -121,6 +112,14 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 
 	public String getIdasig() {
 		return idasig;
+	}
+
+	public void setAsig(Asignatura asig) {
+		this.asig = asig;
+	}
+
+	public Asignatura getAsig() {
+		return asig;
 	}
 
 	
