@@ -20,7 +20,7 @@
 	
 	<a href="<s:property value="#mostrarnotas"/>"><s:text name="label.studentnotas.button"/></a>       
 	
-	<s:url action="doLogin!doLogOut"  id="logout" escapeAmp="false">
+	<s:url action="login!doLogOut"  id="logout" escapeAmp="false">
 	</s:url>
 	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
 	
@@ -48,12 +48,12 @@
 		            <td class="nowrap"><s:property value="#numunidades"/></td>
 		            <td class="nowrap"><s:property value="profe.numalumnos"/></td>
 		            <td class="nowrap">
-		            <s:url action="doStudentAction!desmatricular"  id="desmatricular" escapeAmp="false">
+		            <s:url action="studentAction!desmatricular"  id="desmatricular" escapeAmp="false">
 		            	<s:param name="idasig" value="%{ Id }"/>
 					</s:url>
 					<a href="<s:property value="#desmatricular"/>"><s:text name="label.studentdesmatric.button"/></a></td>
 					<td class="nowrap">
-					<s:url action="doSubjectAction!notas"  id="notas" escapeAmp="false">
+					<s:url action="subjectAction!notas"  id="notas" escapeAmp="false">
 						<s:param name="idasig" value="%{ Id }"/>
 						<s:param name="idalumno" value="%{ alum.Dni }"/>
 					</s:url>

@@ -9,7 +9,7 @@
 	<body>
 		<div class="titleDiv"><s:text name="application.title"/></div>
 		</title><h1><s:text name="label.login.title"/></h1>
-		<s:form action="doLogin!doLogin" method="login">
+		<s:form action="loginAction!doLogin" method="login">
 			
 			<tr>
 				<td colspan="2">
