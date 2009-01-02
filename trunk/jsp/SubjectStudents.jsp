@@ -11,7 +11,7 @@
 	<h1><s:text name="label.subject.title"/><s:property value="asig.Profesor.Nombre"/>(<s:property value="asig.Nombre"/>)</h1>
 	
 	
-	<s:url action="doLogin!doLogOut"  id="logout" escapeAmp="false">
+	<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
 	</s:url>
 	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
 	

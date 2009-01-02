@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
+import iso3.pt.action.Rol;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -21,36 +21,32 @@ import iso3.pt.service.*;
 public  class LoginAction  extends ActionSupport implements Preparable{
 
 	private PtDaoService DAO=null;
+	private List<Rol> roles = null;
 	private Rol selectedrol = null;
 	private Profesor profe = null;
 	private Alumno alum =null;
 	private List<Asignatura> asigs =null;
 	private int numunidades = 0;
 	private int numalumnos = 0;
+	private String username = null;
+	private String password = null;
 	
-
-    
     
     public String doLogin() throws Exception {
         System.out.println("Validating Login");
-        DAO= new PtDaoService();
-        /*Map session = ActionContext.getContext().getSession();
-        System.out.println("Crea session");
-        String full= (String)session.get("rol");//para obtener de session*/
-        
+        DAO= new PtDaoService();        
         if (getUsername()==null || getPassword()==null)
-        {	addActionError("Compulsory to specify both username and password");
+        {	
+        	addActionError("Compulsory to specify both username and password");
         	return ERROR;
         }
     	else if (selectedrol.getFullName().equals("Profesor"))
-    		{	
+    		{		
     			int usern = Integer.parseInt(username);
     			setProfe(DAO.loginProfesor(usern, password));
     			if (getProfe()!=null)
     			{	
-    				System.out.println("Crea en session");
-    				ActionContext.getContext().getSession().put("profe", profe);
-    				//System.out.println(ActionContext.getContext().getSession().get("profe").toString());
+    				ActionContext.getContext().getSession().put("profe", getProfe());
 					return "listLecturerSubjects";
     			}
 				else 
@@ -64,18 +60,15 @@ public  class LoginAction  extends ActionSupport implements Preparable{
     			setAlum(DAO.loginAlumno(usern, password));
     		
     			if (getAlum()!=null)
-    	        {	System.out.println("Crea en session");
-    	        	ActionContext.getContext().getSession().put("alum", getAlum());
-    	        	System.out.println(ActionContext.getContext().getSession().get("alum").toString());
-				
+    	        {	    			
+    	        	ActionContext.getContext().getSession().put("alum", getAlum());    	        				
 					return "listStudentSubjects";
     	        }
             	else
             	{
         			addActionError("Incorrect username and password");
 	        		return ERROR;
-        		}
-    		
+        		}    		
     		}
     		
     		
@@ -85,23 +78,14 @@ public  class LoginAction  extends ActionSupport implements Preparable{
 	}
     
     public String doLogOut() throws Exception {
-        username=null;
+    	System.out.println("logout");
+    	username=null;
         password=null;
-        System.out.println("logout");
+        ActionContext.getContext().getSession().clear();        
         return INPUT;
         
        
 	}
-
-
-    // ---- Username property ----
-
-    /**
-     * <p>Field to store User username.</p>
-     * <p/>
-     */
-    private String username = null;
-
 
     /**
      * <p>Provide User username.</p>
@@ -118,18 +102,9 @@ public  class LoginAction  extends ActionSupport implements Preparable{
      * @param value The username to set.
      */
     public void setUsername(String value) {
-    	System.out.println("setUsername");
+    	//System.out.println("setUsername");
         username = value;
     }
-
-    // ---- Username property ----
-
-    /**
-     * <p>Field to store User password.</p>
-     * <p/>
-     */
-    private String password = null;
-
 
     /**
      * <p>Provide User password.</p>
@@ -146,7 +121,7 @@ public  class LoginAction  extends ActionSupport implements Preparable{
      * @param value The password to set.
      */
     public void setPassword(String value) {
-    	System.out.println("setPassword");
+    	//System.out.println("setPassword");
         password = value;
     }
 
@@ -154,8 +129,17 @@ public  class LoginAction  extends ActionSupport implements Preparable{
 	public void prepare() throws Exception {
 		// TODO Auto-generated method stub
 		System.out.println("prepare loginaction");
-		
-			
+		roles = new ArrayList<Rol>();
+		roles.add(new Rol("Profesor"));
+		roles.add(new Rol("Alumno"));
+		if (this.getSelectedrol() != null ) {
+			for (Rol rol: this.getRoles()) {
+				if (rol.equals(this.getSelectedrol())) {
+					this.setSelectedrol(rol);
+					break;
+				}
+			}
+		}	
 	}
 
 	public void setSelectedrol(Rol selectedrol) {
@@ -191,11 +175,12 @@ public  class LoginAction  extends ActionSupport implements Preparable{
 		this.asigs = asigs;
 	}
 
+	
 	public List<Asignatura> getAsigs() {
 		System.out.println("getasigs");
 		
 		if (asigs==null)
-		{	System.out.println(profe);
+		{	
 			asigs = new ArrayList<Asignatura>();
 			Set<Asignatura> asigset=DAO.getAsignaturasProfesor(profe.getId());
 			System.out.println("Generar listado asigs de set a list");
@@ -227,11 +212,14 @@ public  class LoginAction  extends ActionSupport implements Preparable{
 		return numalumnos;
 	}
 	
-	
+	public void setRoles(List<Rol> roles) {
+		this.roles = roles;
+	}
 
-	
-
-	
-
-	
+	public List<Rol> getRoles() {
+		System.out.println("getRoles");
+		for (int i=0;i<roles.size();i++)
+			System.out.println(roles.get(i));
+		return roles;
+	}	
 }

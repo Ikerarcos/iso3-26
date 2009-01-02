@@ -9,6 +9,9 @@
 	<s:actionerror/>
 	<div class="titleDiv"><s:text name="application.title"/></div>
 	<h1><s:text name="label.marksubject.title"/><s:property value="alum.Nombre"/>(<s:property value="asig.Nombre"/>)</h1>
+	<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
+	</s:url>
+	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
 	<table class="borderAll">
 		    <tr>
 		        <th><s:text name="label.student.dni"/></th>
@@ -69,7 +72,7 @@
 
 			<s:textfield name="concepto" label="%{getText('label.evaluacion.Concept')}"/>
 			<s:textfield name="nota" label="%{getText('label.evaluacion.Mark')}"/>
-			<s:submit value="%{getText('button.label.submit')}" align="center"/>
+			<s:submit value="%{getText('button.label.submit')}" align="center"/><!--  <a href="<s:property value="#lo q sea"/>"></a>-->
 			<s:submit value="%{getText('button.label.cancel')}" name="redirect-action:lecturerAction"/>
 		
 	</s:form>

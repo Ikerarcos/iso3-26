@@ -10,17 +10,16 @@
 	<div class="titleDiv"><s:text name="application.title"/></div>
 	<h1><s:text name="label.student.title"/><s:property value="alum.Nombre"/>(<s:property value="alum.Dni"/>)</h1>
 	
-	<s:url action="doStudentAction!listaMatricular"  id="listaMatricular" escapeAmp="false">
+	<s:url action="studentAction!doListaMatricular"  id="listaMatricular" escapeAmp="false">
 	</s:url>	
 	<a href="<s:property value="#listaMatricular"/>"><s:text name="label.studentmatric.button"/></a>       
 	
-	<s:url action="doSubjectAction!doMostrarNotas"  id="mostrarnotas" escapeAmp="false">
+	<s:url action="subjectAction!doMostrarNotas"  id="mostrarnotas" escapeAmp="false">
 		<s:param name="idalumno" value="alum.Dni"/>
 	</s:url>
-	
 	<a href="<s:property value="#mostrarnotas"/>"><s:text name="label.studentnotas.button"/></a>       
 	
-	<s:url action="login!doLogOut"  id="logout" escapeAmp="false">
+	<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
 	</s:url>
 	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
 	
@@ -53,7 +52,7 @@
 					</s:url>
 					<a href="<s:property value="#desmatricular"/>"><s:text name="label.studentdesmatric.button"/></a></td>
 					<td class="nowrap">
-					<s:url action="subjectAction!notas"  id="notas" escapeAmp="false">
+					<s:url action="subjectAction!doMostrarNotas"  id="notas" escapeAmp="false">
 						<s:param name="idasig" value="%{ Id }"/>
 						<s:param name="idalumno" value="%{ alum.Dni }"/>
 					</s:url>

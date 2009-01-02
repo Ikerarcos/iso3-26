@@ -96,7 +96,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	System.out.println(idasig);
+    	//System.out.println(idasig);
     	return SUCCESS;
     	
     }

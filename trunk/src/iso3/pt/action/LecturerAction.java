@@ -32,10 +32,10 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
     
     
     public void prepare() throws Exception
-    {	System.out.println("prepare profe");
-    	
+    {	
+    	System.out.println("prepare lecturerAction");    	
     	profe = (Profesor) ActionContext.getContext().getSession().get("profe");
-    	System.out.println(profe);
+    	//System.out.println(profe);
     	DAO= new PtDaoService();
     	
     }
@@ -48,10 +48,8 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 		System.out.println("doListing EN PROFE");
 		
 		if (getAsigs()==null)
-		{	System.out.println(profe);
-			
-			asigs=DAO.getAsignaturasProfesor(profe.getId());
-			
+		{				
+			asigs=DAO.getAsignaturasProfesor(profe.getId());			
 		}
 		return SUCCESS;
 	}
@@ -91,15 +89,15 @@ public  class LecturerAction  extends ActionSupport implements Preparable{
 	
 	public String listAlumnos()//PROVISIONAL
 	{
-		System.out.println("listalumnos");
-		System.out.println(idasig);
+		System.out.println("lista alumnos EN PROFE");
 		asig = DAO.getAsignatura(Integer.parseInt(idasig));
 		alumnos=asig.getAlumnos();
-		System.out.println("listado");
-		for (Iterator<Alumno> iterator = alumnos.iterator(); iterator.hasNext(); )
-		{	Alumno alum=iterator.next();
+		//System.out.println("listado");
+		/*for (Iterator<Alumno> iterator = alumnos.iterator(); iterator.hasNext(); )
+		{	
+			Alumno alum=iterator.next();
 			System.out.println(alum);
-		}
+		}*/
 		
 		
 		return "studentslist";

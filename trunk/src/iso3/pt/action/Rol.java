@@ -23,14 +23,14 @@ public class Rol implements java.io.Serializable, Comparable {
 	}
 	
 	public String getFullName() {
-		System.out.println("getfullname en Rol");
-		System.out.println(fullName);
+		//System.out.println("getfullname en Rol");
+		//System.out.println(fullName);
 		return fullName;
 	}
 
 	public void setFullName(String fullName) {
-		System.out.println("setFullName");
-		System.out.println(fullName);
+		//System.out.println("setFullName");
+		//System.out.println(fullName);
 		this.fullName = fullName;
 	}
 
