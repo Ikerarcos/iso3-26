@@ -23,6 +23,15 @@
         
     </path>
 	
+	<target name="help">
+		<echo>Usage: ant [prepare | build | jar | war | deploy | undeploy | clean]</echo>
+	</target>
+	
+	<target name="undeploy">
+		<delete file="${tomcat.home}/webapps/${project.file}.war"/>
+		<delete dir="${tomcat.home}/webapps/${project.file}"/>
+	</target>
+	
     <target name="clean" depends="undeploy">
         <delete dir="${build.dir}"/>
         <delete dir="${dist.dir}"/>
@@ -32,9 +41,6 @@
     	<mkdir dir="${build.dir}"/>
     	<mkdir dir="${dist.dir}"/>
     	<mkdir dir="${conf.dir}"/>
-    	
-    	<!--HAY Q CONSEGUIR QUE SE EJECUTE EN VENTANA NUEVA
-    	<exec executable="start ${tomcat.home}/bin/startup.bat"/>-->
     </target>
  
     <target name="build" depends="prepare">
@@ -58,19 +64,7 @@
             
     	</copy>
     </target>
-	
-    <target name="test" depends="build">
-        <java classname="iso3.pt.dao.PtDAO"  fork="true">
-            <classpath>
-                <path refid="classpath"/>
-            </classpath>
-        </java>
-    </target>
-    <target name="help">
-		<echo>Usage: ant [build | test | clean]</echo>
-	</target>
-	
-	
+    
 	<target name="jar" depends="build">
 		<jar destfile="${dist.dir}/${project.file}.jar">
             <fileset dir="${build.dir}"/>
@@ -97,11 +91,5 @@
 	<target name="deploy" depends="war">
 		<copy file="${dist.dir}/${project.file}.war" todir="${tomcat.home}/webapps"/>
 		<exec executable="${tomcat.home}/bin/startup.bat"/>
-    </target>
-	
-	<target name="undeploy">
-		
-		<delete file="${tomcat.home}/webapps/${project.file}.war"/>
-		<delete dir="${tomcat.home}/webapps/${project.file}"/>
     </target>
 </project>
