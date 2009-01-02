@@ -15,7 +15,7 @@
 		<!-- Login Form Configuration -->
         <action name="showLogin" class="iso3.pt.action.ShowLoginAction">
 			<result>/jsp/login.jsp</result>
-        </action>
+        </action>  
         
 		<action name="loginAction" class="iso3.pt.action.LoginAction" method="login">
 			<result  name="success">/jsp/login.jsp</result>
@@ -33,9 +33,9 @@
         
         <action name="studentAction" class="iso3.pt.action.StudentAction" method="listing">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
-			<!--<result  name="input" type="redirectAction>studentAction</result>-->
 			<result  name="listaasignaturasmatricular">/jsp/StudentSubjectRegistrationForm.jsp</result>
-            <result >/jsp/studentSubjects.jsp</result>
+            <!--  <result >/jsp/studentSubjects.jsp</result>  -->
+            <result name="input">/jsp/studentSubjects.jsp</result>
         </action>
         
         <action name="subjectAction" class="iso3.pt.action.SubjectAction" method="listing">
@@ -46,7 +46,7 @@
         
         <action name="subjectMarkingAction" class="iso3.pt.action.SubjectMarkingAction" method="marking">
 			<result  name="success">/jsp/StudentSubjectMarkingForm.jsp</result>
-            
+            <result  name="input">/jsp/StudentSubjectMarkingForm.jsp</result>
         
       	</action>
         

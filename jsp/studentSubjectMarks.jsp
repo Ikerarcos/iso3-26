@@ -9,6 +9,9 @@
 	<s:actionerror/>
 	<div class="titleDiv"><s:text name="application.title"/></div>
 	<h1><s:text name="label.student.title"/><s:property value="alum.Nombre"/>(<s:property value="asig.Nombre"/>)</h1>
+	<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
+	</s:url>
+	<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
 	<table class="borderAll">
 		    <tr>
 		        <th><s:text name="label.student.dni"/></th>

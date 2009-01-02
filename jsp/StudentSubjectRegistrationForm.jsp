@@ -9,15 +9,21 @@
 	<body>
 		<div class="titleDiv"><s:text name="application.title"/></div>
 		</title><h1><s:text name="label.matric.title"/><s:property value="alum.nombre"/>(<s:property value="alum.Dni"/>)</h1>
-		
-		<s:form action="studentAction!matricular" >
-			<s:select name="subject.id" list="asiglistmatric" listKey="name" listValue="name" label="%{getText('label.matric.select')}"/>
-			
-			<s:submit value="%{getText('button.label.submit')}" />
-		    <s:submit value="%{getText('button.label.cancel')}" name="redirect-action:studentAction"/>
+		<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
+		</s:url>
+		<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
+		<s:form action="studentAction!doMatricular" method="matricular" >
+			<tr>
+				<td colspan="2">
+					<s:actionerror />
+					<!--<s:fielderror />-->
+				</td>
+			</tr>
+			<s:select name="subject.id" list="asiglistmatric" listKey="name" listValue="name" label="%{getText('label.matric.select')}"/>			
+			<s:submit value="%{getText('button.label.submit')}" align="center" onclick="form.onsubmit=null"><a href="<s:property value="#matricular"/>"></a></s:submit>
+		    <s:submit value="%{getText('button.label.cancel')}" name="redirect-action:studentAction" align="center"/>
 		
 		</s:form>
-		
 	</body>
 
 </html>

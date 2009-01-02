@@ -119,14 +119,14 @@ public  class ShowLoginAction  extends ActionSupport implements Preparable{
 	}
 
 	public void setSelectedrol(Rol selectedrol) {
-		System.out.println("setSelectedrol");
-		System.out.println(selectedrol);
+		//System.out.println("setSelectedrol");
+		//System.out.println(selectedrol);
 		this.selectedrol = selectedrol;
 	}
 
 	public Rol getSelectedrol() {
-		System.out.println("getSelectedrol");
-		System.out.println(selectedrol);
+		//System.out.println("getSelectedrol");
+		//System.out.println(selectedrol);
 		return selectedrol;
 	}
 
