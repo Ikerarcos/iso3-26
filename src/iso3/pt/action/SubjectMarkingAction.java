@@ -2,6 +2,8 @@ package iso3.pt.action;
 import java.util.HashSet;
 import java.util.Set;
 
+
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -11,6 +13,7 @@ import iso3.pt.model.Asignatura;
 import iso3.pt.model.Evaluacion;
 import iso3.pt.model.Profesor;
 import iso3.pt.service.*;
+import java.util.Iterator;
 
 
 
@@ -43,9 +46,14 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
      System.out.println(concept+" "+nota+" "+idasig+" "+idalum);
      DAO.addEvaluacion(concept, nota, idasig, idalum);
      eval=DAO.getEvaluaciones(idasig,idalum);
-     ActionContext.getContext().getSession().put(1, eval);
+     //ActionContext.getContext().getSession().put(1, eval);
      //setEval(DAO.getEvaluaciones(idasig,idalum));
-     return INPUT;
+     for (Iterator<Evaluacion> iter = eval.iterator(); iter.hasNext();) 
+		{
+    	 Evaluacion emp1 = iter.next();
+    	 System.out.println(emp1);
+ 	}
+     return "evalasignada";
     }
 
 
@@ -58,6 +66,7 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 		alum=DAO.getAlumno(getIdalum());
 		asig=DAO.getAsignatura(getIdasig());
 		setEval(new HashSet<Evaluacion>());
+		eval=DAO.getEvaluaciones(idasig,idalum);
 	}
 
 
@@ -150,6 +159,7 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 	 * @return the eval
 	 */
 	private Set<Evaluacion> getEval() {
+		System.out.println("geteval");
 		return eval;
 	}
     }
