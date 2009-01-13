@@ -30,11 +30,11 @@
 		            <td class="nowrap"><s:property value="%{ Nombre }"/></td>
 		            <td class="nowrap"><s:property value="%{ Creditos }"/></td>
 		            <td class="nowrap"><s:property value="profe.nombre"/></td>
-		            <s:url action="subjectAction!listUnits" id="numunidades" escapeAmp="false">
+		            <!--<s:url action="subjectAction!listUnits" id="numunidades" escapeAmp="false">
 						<s:param name="asig.id" value="%{ Id }"/>
-					</s:url>
-		            <td class="nowrap"><s:property value="#numunidades"/></td>
-		            <td class="nowrap"><s:property value="profe.numalumnos"/></td>
+					</s:url>-->
+		            <td class="nowrap"><s:property value="unidades.size"/></td>
+		            <td class="nowrap"><s:property value="alumnos.size"/></td>
 		            <td class="nowrap">
 		            <s:url action="lecturerAction!listAlumnos"  id="studentslist" escapeAmp="false">
 		            	<s:param name="idasig" value="%{ Id }"/>

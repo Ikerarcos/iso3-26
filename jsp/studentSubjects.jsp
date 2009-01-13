@@ -35,17 +35,21 @@
 		        <th><s:text name="label.lecturer.Numero"/></th>
 		        <th>&nbsp;&nbsp;</th>
 		    </tr>
+		     
 		    <s:iterator value="asiglist" status="status">
 		        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
 		            <td class="nowrap"><s:property value="%{ Id }"/></td>
 		            <td class="nowrap"><s:property value="%{ Nombre }"/></td>
 		            <td class="nowrap"><s:property value="%{ Creditos }"/></td>
-		            <td class="nowrap"><s:property value="asig.profe"/></td>
-		            <s:url action="doSubjectAction!listUnits" id="numunidades" escapeAmp="false">
+		            <td class="nowrap"><s:property value="%{ Profesor.Nombre }"/></td>
+		            <!-- <td class="nowrap">
+		            <s:url action="subjectAction!listUnits" id="numunidades" escapeAmp="false">
 						<s:param name="id" value="%{ Id }"/>
 					</s:url>
-		            <td class="nowrap"><s:property value="#numunidades"/></td>
-		            <td class="nowrap"><s:property value="profe.numalumnos"/></td>
+					<a href="<s:property value="#numunidades"/>"><s:text name="label.lecturer.Listado"/></a></td> -->
+		            <!-- <td class="nowrap"><s:property value="#numunidades"/></td> -->
+		            <td class="nowrap"><s:property value="unidades.size"/></td>
+		            <td class="nowrap"><s:property value="alumnos.size"/></td>
 		            <td class="nowrap">
 		            <s:url action="studentAction!desmatricular"  id="desmatricular" escapeAmp="false">
 		            	<s:param name="idasig" value="%{ Id }"/>

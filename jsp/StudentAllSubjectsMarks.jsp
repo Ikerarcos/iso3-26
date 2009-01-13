@@ -21,7 +21,7 @@
 		        <th>&nbsp;&nbsp;</th>
 		    </tr>
 	    
-	        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
+	        <tr><!-- class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>"> --> 
 	            <td class="nowrap"><s:property value="alum.Dni"/></td>
 	            <td class="nowrap"><s:property value="alum.Nombre"/></td>
 	            <td class="nowrap"><s:property value="alum.Telefono"/></td>
@@ -31,7 +31,7 @@
 	</table>
 	
 	<BR>
-	
+		
 	<BR>
 
 
@@ -40,7 +40,7 @@
 		        <th><s:text name="label.evaluacion.Subject"/></th>
 		        <th><s:text name="label.evaluacion.Id"/></th>
 		        <th><s:text name="label.evaluacion.Concept"/></th>
-		        <th><s:text name="label.evaluacion.Note"/></th>
+		        <th><s:text name="label.evaluacion.Mark"/></th>
 		        
 		        <th>&nbsp;&nbsp;</th>
 		    </tr>
@@ -56,7 +56,7 @@
 	</table>
 	<s:form action="studentAction" method="listing">
 		    
-		    <s:submit value="%{getText('button.label.cancel')}"/>
+		    <s:submit value="%{getText('button.label.cancel')}" align="center"/>
 		    
 	</s:form>
 	

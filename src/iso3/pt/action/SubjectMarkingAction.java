@@ -1,4 +1,7 @@
 package iso3.pt.action;
+import java.util.HashSet;
+import java.util.Set;
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.opensymphony.xwork2.Preparable;
@@ -6,6 +9,7 @@ import com.opensymphony.xwork2.Preparable;
 import iso3.pt.model.Alumno;
 import iso3.pt.model.Asignatura;
 import iso3.pt.model.Evaluacion;
+import iso3.pt.model.Profesor;
 import iso3.pt.service.*;
 
 
@@ -17,10 +21,11 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 
 	private int idasig = 0;
 	private int idalum = 0;
+	private Set<Evaluacion> eval;
+	private Profesor profesor;
 	private Asignatura asig = null;
 	private Alumno alum = null;
 	private PtDaoService DAO=null;
-	private Evaluacion eval=null;
 	private String concept = null;
 	private int nota = 0;
 
@@ -28,21 +33,19 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
     
     public String doSubjectMarkingAction()
     {
-
-    /*ActionContext.getContext().getSession().remove("alumtomark");
-    ActionContext.getContext().getSession().put("alumtomark",alum);
-    ActionContext.getContext().getSession().remove("asigtomark");
-    ActionContext.getContext().getSession().put("asigtomark",asig);*/
+    System.out.println("doSubjectMarkingAction (succes)");
     return SUCCESS;
     }
     
     public String doMarking()
     {
-     System.out.println("doMarking");
-     eval= new Evaluacion(concept,nota,asig);
-     System.out.println(eval);
-     alum.addEvaluacion(eval);	
-     return SUCCESS;
+     System.out.println("doMarking (input)");
+     System.out.println(concept+" "+nota+" "+idasig+" "+idalum);
+     DAO.addEvaluacion(concept, nota, idasig, idalum);
+     eval=DAO.getEvaluaciones(idasig,idalum);
+     ActionContext.getContext().getSession().put(1, eval);
+     //setEval(DAO.getEvaluaciones(idasig,idalum));
+     return INPUT;
     }
 
 
@@ -51,17 +54,11 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 		// TODO Auto-generated method stub
 		System.out.println("prepare subjectmarking");
 		DAO=new PtDaoService();
-		System.out.println(getIdalum());
-		System.out.println(getIdasig());
+		setProfesor((Profesor)ActionContext.getContext().getSession().get("profe"));
 		alum=DAO.getAlumno(getIdalum());
 		asig=DAO.getAsignatura(getIdasig());
-		
-		
-		System.out.println(getAlum());
+		setEval(new HashSet<Evaluacion>());
 	}
-	
-	
-
 
 
 	public void setIdasig(int idasig) {
@@ -126,5 +123,33 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 
 	public int getNota() {
 		return nota;
+	}
+
+	/**
+	 * @param profesor the profesor to set
+	 */
+	private void setProfesor(Profesor profesor) {
+		this.profesor = profesor;
+	}
+
+	/**
+	 * @return the profesor
+	 */
+	private Profesor getProfesor() {
+		return profesor;
+	}
+
+	/**
+	 * @param eval the eval to set
+	 */
+	private void setEval(Set<Evaluacion> eval) {
+		this.eval = eval;
+	}
+
+	/**
+	 * @return the eval
+	 */
+	private Set<Evaluacion> getEval() {
+		return eval;
 	}
     }

@@ -42,7 +42,7 @@
 			
 		
 	</table>
-	<s:form action="doLecturerAction" >
+	<s:form action="lecturerAction" >
 			<s:submit value="%{getText('button.label.cancel')}" align="center"/>	
 	</s:form>
 	

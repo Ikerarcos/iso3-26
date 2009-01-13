@@ -33,6 +33,7 @@
 	<BR>
 	
 	<BR>
+	
 	<table class="borderAll">
 		    <tr>
 		        <th><s:text name="label.subject.Id"/></th>
@@ -49,7 +50,7 @@
 	            <td class="nowrap"><s:property value="asig.Nombre"/></td>
 	            <td class="nowrap"><s:property value="asig.Creditos"/></td>
 	            <td class="nowrap"><s:property value="asig.Profesor.Nombre"/></td>
-	            <td class="nowrap"><s:property value="asig.NumAlumnos"/></td>
+	            <td class="nowrap"><s:property value="asig.alumnos.size"/></td>
 	            
 	            
 	        </tr>
@@ -59,22 +60,22 @@
 	
 	<BR>
 	<BR>
+	
 	<s:form action="subjectMarkingAction" >
 			
 			<tr>
 				<td colspan="2">
 					<s:actionerror />
 					<!--<s:fielderror />-->
+				
+			<s:hidden name="idasig" value="%{asig.Id}"/>
+			<s:hidden name="idalum" value="%{alum.Dni}"/>
+			<s:textfield name="concept" label="%{getText('label.evaluacion.Concept')}"/>
+			<s:textfield name="nota" label="%{getText('label.evaluacion.Mark')}"/>
+			<s:submit value="%{getText('button.label.submit')}" align="center"/>
+			<s:submit value="%{getText('button.label.cancel')}" name="redirect-action:lecturerAction"/>
 				</td>
 			</tr>
-			<s:hidden name="idasig" value="asig.Id"/>
-			<s:hidden name="idalum" value="alum.Dni"/>
-
-			<s:textfield name="concepto" label="%{getText('label.evaluacion.Concept')}"/>
-			<s:textfield name="nota" label="%{getText('label.evaluacion.Mark')}"/>
-			<s:submit value="%{getText('button.label.submit')}" align="center"/><!--  <a href="<s:property value="#lo q sea"/>"></a>-->
-			<s:submit value="%{getText('button.label.cancel')}" name="redirect-action:lecturerAction"/>
-		
 	</s:form>
 	
 </body>
