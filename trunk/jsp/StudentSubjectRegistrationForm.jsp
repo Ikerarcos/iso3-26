@@ -12,7 +12,7 @@
 		<s:url action="loginAction!doLogOut"  id="logout" escapeAmp="false">
 		</s:url>
 		<a href="<s:property value="#logout"/>"><s:text name="label.logout.button"/></a>
-		<s:form action="studentAction!doMatricular" method="matricular" >
+		<s:form action="studentAction!matricular">
 			<tr>
 				<td colspan="2">
 					<s:actionerror />
@@ -20,7 +20,7 @@
 				</td>
 			</tr>
 			<s:select name="subject.id" list="asiglistmatric" listKey="name" listValue="name" label="%{getText('label.matric.select')}"/>			
-			<s:submit value="%{getText('button.label.submit')}" align="center" onclick="form.onsubmit=null"><a href="<s:property value="#matricular"/>"></a></s:submit>
+			<s:submit value="%{getText('button.label.submit')}" align="center" />
 		    <s:submit value="%{getText('button.label.cancel')}" name="redirect-action:studentAction" align="center"/>
 		
 		</s:form>

@@ -44,9 +44,10 @@
             
         </action>
         
-        <action name="subjectMarkingAction" class="iso3.pt.action.SubjectMarkingAction" method="marking">
+        <action name="subjectMarkingAction" class="iso3.pt.action.SubjectMarkingAction" method="marking">			
 			<result  name="success">/jsp/StudentSubjectMarkingForm.jsp</result>
-            <result  name="input">/jsp/StudentSubjectMarkingForm.jsp</result>
+			<!-- <result  name="input">/jsp/StudentSubjectMarkingForm.jsp</result> -->
+            <result  name="input">/jsp/studentSubjectMarks.jsp</result>
         
       	</action>
         

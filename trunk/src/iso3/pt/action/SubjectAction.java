@@ -1,5 +1,6 @@
 package iso3.pt.action;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,18 +25,19 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	private PtDaoService DAO=null;
 	private Asignatura asig = null;
 	private Alumno alum = null;
+	
 	private int idalumno=0;
 	private int idasig = 0;
-	private Set<Evaluacion >setnotas =null;
+	//private Set<Evaluacion >setnotas =null;
 	private Set<Evaluacion >setallnotas =null;
 	
 	@Override
 	public void prepare() throws Exception {
 		System.out.println("prepare subject");
-		System.out.println(idalumno);
+		//System.out.println(idalumno);
 		DAO =new PtDaoService();
 		alum=DAO.getAlumno(idalumno);
-		System.out.println(alum);
+		//System.out.println(alum);
 		
 	}
 
@@ -97,6 +99,7 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 
 	public String doMostrarNotas()
 	{
+		setallnotas=new HashSet<Evaluacion>();
 		setSetallnotas(alum.getEvaluaciones());
 		
 		return "mostrarnotas";
@@ -105,7 +108,7 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	
 
 
-	public void setSetnotas(Set<Evaluacion > setnotas) {
+	/*public void setSetnotas(Set<Evaluacion > setnotas) {
 		this.setnotas = setnotas;
 	}
 
@@ -114,7 +117,7 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	public Set<Evaluacion > getSetnotas() {
 		System.out.println("getSetnotas");
 		return setnotas;
-	}
+	}*/
 
 
 

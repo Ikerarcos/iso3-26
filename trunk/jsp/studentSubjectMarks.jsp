@@ -49,33 +49,35 @@
 	            <td class="nowrap"><s:property value="asig.Nombre"/></td>
 	            <td class="nowrap"><s:property value="asig.Creditos"/></td>
 	            <td class="nowrap"><s:property value="asig.Profesor.Nombre"/></td>
-	            <td class="nowrap"><s:property value="asig.NumAlumnos"/></td>
+	            <td class="nowrap"><s:property value="asig.alumnos.size"/></td>
 	            
 	            
 	        </tr>
 			
 	</table>
 	
+	<BR>
+	<BR>
 	
-	<BR>
-	<BR>
 	<table class="borderAll">
 		    <tr>
 		        <th><s:text name="label.evaluacion.Id"/></th>
 		        <th><s:text name="label.evaluacion.Concept"/></th>
-		        <th><s:text name="label.evaluacion.Note"/></th>
+		        <th><s:text name="label.evaluacion.Mark"/></th>
 		        
 		        <th>&nbsp;&nbsp;</th>
-		    </tr>
-		    <s:iterator value="setnotas" status="status">
+		    </tr>		    
+		    <s:iterator value="eval" status="status">
 		        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
-		            <td class="nowrap"><s:property value="%{ Id }"/></td>
-		            <td class="nowrap"><s:property value="%{ Concepto }"/></td>
-		            <td class="nowrap"><s:property value="%{ Nota }"/></td>
+		            <td class="nowrap"><s:property value="%{Id}"/></td>
+		            <td class="nowrap"><s:property value="%{Concepto}"/></td>
+		            <td class="nowrap"><s:property value="%{Nota}"/></td>
 		            
 		        </tr>
 			</s:iterator>
 	</table>
-	
+	<s:form action="lecturerAction" >
+			<s:submit value="%{getText('button.label.cancel')}" align="center"/>	
+	</s:form>
 </body>
 </html>
