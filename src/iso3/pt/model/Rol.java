@@ -1,4 +1,4 @@
-package iso3.pt.action;
+package iso3.pt.model;
 
 import java.util.*;
 

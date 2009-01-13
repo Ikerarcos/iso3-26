@@ -1,6 +1,5 @@
-package iso3.pt.action;
+package iso3.pt.model;
 
-import iso3.pt.model.Asignatura;
 
 import java.util.*;
 
