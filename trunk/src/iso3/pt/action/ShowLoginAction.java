@@ -8,6 +8,7 @@ import com.opensymphony.xwork2.Preparable;
 
 
 
+import iso3.pt.model.Rol;
 import iso3.pt.service.*;
 
 

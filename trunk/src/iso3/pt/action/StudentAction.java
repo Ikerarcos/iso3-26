@@ -29,13 +29,13 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	private String idasig = null;
 	private Asignatura asigmatric = null;
 	private Subject subject =null;
-	private String name =null;
 
 	@Override
 	public void prepare() throws Exception {
 		System.out.println("prepare en student");
 		DAO=new PtDaoService();
 		setAlum((Alumno)ActionContext.getContext().getSession().get("alum"));
+		System.out.println("alum dni: "+alum.getDni());
 		Set<Asignatura> alumset = getAlum().getAsignaturas();
 		setAsiglist(new ArrayList<Asignatura>());
 		for (Iterator<Asignatura> iter = alumset.iterator(); iter.hasNext();) 
@@ -146,15 +146,13 @@ public  class StudentAction  extends ActionSupport implements Preparable{
     	return "listaasignaturasmatricular";
     }
     
-    public String doMatricular()
+    public String doMatricularse()
     {
     	System.out.println("matricular");
-    	System.out.println(name);
-    	System.out.println(getSubject());
     	System.out.println(alum.getDni());
-    	System.out.println(getSubject().getId());
+    	System.out.println(idasig);
     	
-    	DAO.matricular(alum.getDni(), getSubject().getId());
+    	DAO.matricular(alum.getDni(), Integer.parseInt(idasig));
     	ActionContext.getContext().getSession().remove("alum");
     	alum = (Alumno)DAO.getAlumno(alum.getDni());
     	ActionContext.getContext().getSession().put("alum",alum);
@@ -204,15 +202,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	}
 
 
-	public void setName(String name) {
-		this.name = name;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-    
+	
     
     
 	
