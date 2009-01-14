@@ -65,7 +65,7 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 		setProfesor((Profesor)ActionContext.getContext().getSession().get("profe"));
 		alum=DAO.getAlumno(getIdalum());
 		asig=DAO.getAsignatura(getIdasig());
-		setEval(new HashSet<Evaluacion>());
+		seteval(new HashSet<Evaluacion>());
 		eval=DAO.getEvaluaciones(idasig,idalum);
 	}
 
@@ -151,14 +151,15 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 	/**
 	 * @param eval the eval to set
 	 */
-	private void setEval(Set<Evaluacion> eval) {
+	public void seteval(Set<Evaluacion> eval) {
+		System.out.println("seteval");
 		this.eval = eval;
 	}
 
 	/**
 	 * @return the eval
 	 */
-	private Set<Evaluacion> getEval() {
+	public Set<Evaluacion> geteval() {
 		System.out.println("geteval");
 		return eval;
 	}
