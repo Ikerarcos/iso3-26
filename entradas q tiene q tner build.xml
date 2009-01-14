@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-
-<project basedir="." default="help" name="GestorUD">
-	
-    <target name="help">
-		<echo>Usage: ant [prepare | build | jar | war | deploy | undeploy | clean]</echo>
-	</target>
-
-</project>

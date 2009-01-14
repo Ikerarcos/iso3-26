@@ -34,7 +34,6 @@
         <action name="studentAction" class="iso3.pt.action.StudentAction" method="listing">
 			<result  name="success">/jsp/studentSubjects.jsp</result>
 			<result  name="listaasignaturasmatricular">/jsp/StudentSubjectRegistrationForm.jsp</result>
-            <!--  <result >/jsp/studentSubjects.jsp</result>  -->
             <result name="input">/jsp/studentSubjects.jsp</result>
         </action>
         
@@ -46,7 +45,6 @@
         
         <action name="subjectMarkingAction" class="iso3.pt.action.SubjectMarkingAction" method="marking">			
 			<result  name="success">/jsp/StudentSubjectMarkingForm.jsp</result>
-			<!-- <result  name="input">/jsp/StudentSubjectMarkingForm.jsp</result> -->
             <result  name="evalasignada">/jsp/studentSubjectMarks.jsp</result>
         
       	</action>

@@ -94,7 +94,6 @@ public  class ShowLoginAction  extends ActionSupport implements Preparable{
 	@Override
 	public void prepare() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("prepare show login");
 		roles = new ArrayList<Rol>();
 		roles.add(new Rol("Profesor"));
 		roles.add(new Rol("Alumno"));
@@ -113,21 +112,14 @@ public  class ShowLoginAction  extends ActionSupport implements Preparable{
 	}
 
 	public List<Rol> getRoles() {
-		System.out.println("getRoles");
-		for (int i=0;i<roles.size();i++)
-			System.out.println(roles.get(i));
 		return roles;
 	}
 
 	public void setSelectedrol(Rol selectedrol) {
-		//System.out.println("setSelectedrol");
-		//System.out.println(selectedrol);
 		this.selectedrol = selectedrol;
 	}
 
 	public Rol getSelectedrol() {
-		//System.out.println("getSelectedrol");
-		//System.out.println(selectedrol);
 		return selectedrol;
 	}
 

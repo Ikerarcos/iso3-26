@@ -20,7 +20,6 @@
 			<s:textfield name="username" label="%{getText('label.login.name')}"/>
 			<s:password name="password" label="%{getText('label.login.password')}"/>
 			<s:select name="selectedrol.fullName" list="roles" listKey="fullName" listValue="fullName" label="%{getText('label.roles.select')}"/>
-			<!--<% session.putValue("rol",request.getParameter("username")); %>-->
 			<s:submit value="%{getText('label.login.button')}" align="center"/>
 		</s:form>
 		
