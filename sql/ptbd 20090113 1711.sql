@@ -162,7 +162,7 @@ CREATE TABLE `profesor` (
 
 /*!40000 ALTER TABLE `profesor` DISABLE KEYS */;
 INSERT INTO `profesor` (`PROF_ID`,`PROF_NOMBRE`,`PROF_DNI`,`PROF_PASSWORD`,`PROF_TELEFONO`,`PROF_DESPACHO`) VALUES 
- (1,'Iker Maister',45612485,'iso3','12345678','despacho1'),
+ (1,'Iker Maister',16084303,'iso3','12345678','despacho1'),
  (2,'Sustituto Jones',666,'iso3','87654321','despacho2'),
  (3,'Paco Apocope',1503,'iso3','65465413','despacho3');
 /*!40000 ALTER TABLE `profesor` ENABLE KEYS */;
