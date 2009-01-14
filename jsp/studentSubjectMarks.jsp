@@ -69,7 +69,7 @@
 		    </tr>		    
 		    <s:iterator value="eval" status="status">
 		        <tr class="<s:if test="#status.even">even</s:if><s:else>odd</s:else>">
-		            <td class="nowrap"><s:property value="%{Id}"/></td>
+		            <td class="nowrap"><s:property value="Id"/></td>
 		            <td class="nowrap"><s:property value="%{Concepto}"/></td>
 		            <td class="nowrap"><s:property value="%{Nota}"/></td>
 		            
