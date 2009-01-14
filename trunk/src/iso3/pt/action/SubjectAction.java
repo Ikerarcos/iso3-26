@@ -28,27 +28,21 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	
 	private int idalumno=0;
 	private int idasig = 0;
-	//private Set<Evaluacion >setnotas =null;
 	private Set<Evaluacion >setallnotas =null;
 	
 	@Override
 	public void prepare() throws Exception {
-		System.out.println("prepare subject");
-		//System.out.println(idalumno);
 		DAO =new PtDaoService();
 		alum=DAO.getAlumno(idalumno);
-		//System.out.println(alum);
 		
 	}
 
 
 	
 	public int listUnits(String id)
-	{	System.out.println("listUnits");
+	{	
 		return DAO.getUnidades(Integer.parseInt(id)).size();
-		
-		
-		
+	
 	}
 	
 
@@ -101,25 +95,10 @@ public  class SubjectAction  extends ActionSupport implements Preparable{
 	{
 		setallnotas=new HashSet<Evaluacion>();
 		setSetallnotas(alum.getEvaluaciones());
-		
 		return "mostrarnotas";
 		
 	}
 	
-
-
-	/*public void setSetnotas(Set<Evaluacion > setnotas) {
-		this.setnotas = setnotas;
-	}
-
-
-
-	public Set<Evaluacion > getSetnotas() {
-		System.out.println("getSetnotas");
-		return setnotas;
-	}*/
-
-
 
 	public void setSetallnotas(Set<Evaluacion > setallnotas) {
 		this.setallnotas = setallnotas;

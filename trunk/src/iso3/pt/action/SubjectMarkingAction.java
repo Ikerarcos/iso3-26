@@ -36,22 +36,16 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
     
     public String doSubjectMarkingAction()
     {
-    System.out.println("doSubjectMarkingAction (succes)");
     return SUCCESS;
     }
     
     public String doMarking()
     {
-     System.out.println("doMarking (input)");
-     System.out.println(concept+" "+nota+" "+idasig+" "+idalum);
      DAO.addEvaluacion(concept, nota, idasig, idalum);
      eval=DAO.getEvaluaciones(idasig,idalum);
-     //ActionContext.getContext().getSession().put(1, eval);
-     //setEval(DAO.getEvaluaciones(idasig,idalum));
      for (Iterator<Evaluacion> iter = eval.iterator(); iter.hasNext();) 
 		{
     	 Evaluacion emp1 = iter.next();
-    	 System.out.println(emp1);
  	}
      return "evalasignada";
     }
@@ -60,7 +54,6 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 	@Override
 	public void prepare() throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println("prepare subjectmarking");
 		DAO=new PtDaoService();
 		setProfesor((Profesor)ActionContext.getContext().getSession().get("profe"));
 		alum=DAO.getAlumno(getIdalum());
@@ -95,7 +88,6 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 
 
 	public void setIdalum(int idalumno) {
-		System.out.println("setIdalumno");
 		this.idalum = idalumno;
 	}
 
@@ -108,7 +100,6 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 
 
 	public void setAsig(Asignatura asig) {
-		System.out.println("setAsig");
 		this.asig = asig;
 	}
 
@@ -152,7 +143,6 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 	 * @param eval the eval to set
 	 */
 	public void seteval(Set<Evaluacion> eval) {
-		System.out.println("seteval");
 		this.eval = eval;
 	}
 
@@ -160,7 +150,6 @@ public  class SubjectMarkingAction  extends ActionSupport implements Preparable{
 	 * @return the eval
 	 */
 	public Set<Evaluacion> geteval() {
-		System.out.println("geteval");
 		return eval;
 	}
     }

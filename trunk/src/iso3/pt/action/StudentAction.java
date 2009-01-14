@@ -32,10 +32,8 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 
 	@Override
 	public void prepare() throws Exception {
-		System.out.println("prepare en student");
 		DAO=new PtDaoService();
 		setAlum((Alumno)ActionContext.getContext().getSession().get("alum"));
-		System.out.println("alum dni: "+alum.getDni());
 		Set<Asignatura> alumset = getAlum().getAsignaturas();
 		setAsiglist(new ArrayList<Asignatura>());
 		for (Iterator<Asignatura> iter = alumset.iterator(); iter.hasNext();) 
@@ -43,7 +41,6 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 			Asignatura asig = iter.next();
 			getAsiglist().add(asig);
 			
-			System.out.println(asig);
     	}
 	}
 	
@@ -51,7 +48,6 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	public String doListing()
 	
 	{
-		System.out.println("dolisting en student");
 		return SUCCESS;
 		
 	}
@@ -88,7 +84,6 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 
     public String desmatricular()
     {
-    	System.out.println("desmatricular");
     	DAO.desmatricular(alum.getDni(), Integer.parseInt(idasig));
     	try {
 			prepare();
@@ -96,18 +91,14 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-    	//System.out.println(idasig);
     	return SUCCESS;
     	
     }
     
     public String doListaMatricular()
     {
-    	System.out.println("listaMatricular");
-    	//SOLO METE EN LA LISTA LAS ASIGS EN LAS Q NO STA MATRIC
     	Set<Asignatura> asigset= DAO.getAsignaturas();
     	asiglistmatric = new ArrayList<Subject>();
-    	System.out.println("obtiene lista");
     	boolean matric=false;
     	for (Iterator<Asignatura> iter = asigset.iterator(); iter.hasNext();) 
     	
@@ -117,8 +108,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 			{
 				
 				if (asiglist.get(i).getId()== asig.getId())
-				{ 	System.out.println("coincide:");
-					System.out.println(asiglist.get(i));
+				{ 	
 					matric=true;
 					break;
 				}
@@ -126,9 +116,7 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 	    	}
 	    	if (!matric)
 	    	{	
-	    		System.out.println("no matriculado");
 	    		asiglistmatric.add(new Subject(asig.getNombre(),asig.getId()));
-	    		System.out.println(asig);
 	    	}
     	}
     	if (this.getSubject() != null ) {
@@ -139,24 +127,17 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 					break;
 				}
 			}
-			System.out.println("subject");
-	    	System.out.println(this.subject.getName());
 		}
-    	System.out.println("final listaasignaturasmatricular");
     	return "listaasignaturasmatricular";
     }
     
     public String doMatricularse()
     {
-    	System.out.println("matricular");
-    	System.out.println(alum.getDni());
-    	System.out.println(idasig);
-    	
+   	
     	DAO.matricular(alum.getDni(), Integer.parseInt(idasig));
     	ActionContext.getContext().getSession().remove("alum");
     	alum = (Alumno)DAO.getAlumno(alum.getDni());
     	ActionContext.getContext().getSession().put("alum",alum);
-    	System.out.println("matriculado");
     	try {
 			prepare();
 		} catch (Exception e) {
@@ -173,9 +154,6 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 
 
 	public List<Subject> getAsiglistmatric() {
-		System.out.println("getAsiglistmatric");
-		for (int i=0;i<asiglistmatric.size();i++)
-			System.out.println(asiglistmatric.get(i));
 		
 		return asiglistmatric;
 	}
@@ -192,7 +170,6 @@ public  class StudentAction  extends ActionSupport implements Preparable{
 
 
 	public void setSubject(Subject subject) {
-		System.out.println("setSubject");
 		this.subject = subject;
 	}
 

@@ -40,8 +40,8 @@ CREATE TABLE `alumno` (
 
 /*!40000 ALTER TABLE `alumno` DISABLE KEYS */;
 INSERT INTO `alumno` (`ALUM_DNI`,`ALUM_PASSWORD`,`ALUM_NOMBRE`,`ALUM_TELEFONO`) VALUES 
- (16084303,'setas','setas','645543211'),
- (45820650,'soy gay','David Montero','625703060');
+ (15003,'iso3','Patxi Stone Riser','645543211'),
+ (45820650,'iso3','David Montero','625703060');
 /*!40000 ALTER TABLE `alumno` ENABLE KEYS */;
 
 
@@ -69,8 +69,8 @@ CREATE TABLE `asignatura` (
 /*!40000 ALTER TABLE `asignatura` DISABLE KEYS */;
 INSERT INTO `asignatura` (`ASIG_ID`,`ASIG_CODIGO`,`ASIG_NOMBRE`,`ASIG_CREDITOS`,`PROF_ID`) VALUES 
  (1,20,'ISO',5,1),
- (2,30,'Marketing',3,1),
- (3,40,'GC',2,2);
+ (2,30,'Marketing',3,2),
+ (3,40,'GC',2,3);
 /*!40000 ALTER TABLE `asignatura` ENABLE KEYS */;
 
 
@@ -98,18 +98,18 @@ CREATE TABLE `evaluacion` (
 
 /*!40000 ALTER TABLE `evaluacion` DISABLE KEYS */;
 INSERT INTO `evaluacion` (`EVAL_ID`,`EVAL_CONCEPTO`,`EVAL_NOTA`,`ALUM_DNI`,`ASIG_ID`) VALUES 
- (1,'Cantidad de homesexualidad',10,45820650,1),
- (20,'sad',0,16084303,3),
- (21,'uytiuy',0,16084303,3),
- (22,'dfg',0,16084303,3),
- (23,'asdf',0,16084303,3),
- (24,'examen parcial',5,16084303,3),
- (25,'hola',5,16084303,3),
- (26,'gjhg',0,16084303,3),
- (27,'hhh',0,16084303,3),
- (28,'hhh',0,16084303,3),
- (29,'hhh2',0,16084303,3),
- (30,'hhh3',0,16084303,3);
+ (1,'Examen Parcial 1',10,45820650,1),
+ (20,'Examen Parcial 1',0,45820650,2),
+ (21,'Examen Parcial 1',0,15003,3),
+ (22,'Examen Parcial 2',0,45820650,1),
+ (23,'Examen Parcial 2',0,45820650,2),
+ (24,'Examen Parcial 2',5,15003,3),
+ (25,'Examen Parcial 3',5,45820650,1),
+ (26,'Examen Parcial 3',0,45820650,2),
+ (27,'Examen Parcial 3',0,15003,3),
+ (28,'Examen Parcial 4',0,45820650,1),
+ (29,'Examen Parcial 4',0,45820650,2),
+ (30,'Examen Parcial 4',0,15003,3);
 /*!40000 ALTER TABLE `evaluacion` ENABLE KEYS */;
 
 
@@ -136,7 +136,7 @@ CREATE TABLE `matriculado` (
 INSERT INTO `matriculado` (`ALUM_DNI`,`ASIG_ID`) VALUES 
  (45820650,1),
  (45820650,2),
- (16084303,3);
+ (15003,3);
 /*!40000 ALTER TABLE `matriculado` ENABLE KEYS */;
 
 
@@ -162,8 +162,9 @@ CREATE TABLE `profesor` (
 
 /*!40000 ALTER TABLE `profesor` DISABLE KEYS */;
 INSERT INTO `profesor` (`PROF_ID`,`PROF_NOMBRE`,`PROF_DNI`,`PROF_PASSWORD`,`PROF_TELEFONO`,`PROF_DESPACHO`) VALUES 
- (1,'iker',45612485,'capullo','12345678','despacho1'),
- (2,'paco',333,'capullo','65465413','despacho2');
+ (1,'Iker Maister',45612485,'iso3','12345678','despacho1'),
+ (2,'Sustituto Jones',666,'iso3','87654321','despacho2'),
+ (3,'Paco Apocope',1503,'iso3','65465413','despacho3');
 /*!40000 ALTER TABLE `profesor` ENABLE KEYS */;
 
 
@@ -190,8 +191,9 @@ CREATE TABLE `unidad` (
 
 /*!40000 ALTER TABLE `unidad` DISABLE KEYS */;
 INSERT INTO `unidad` (`UNID_ID`,`UNID_ACRONIMO`,`UNID_TITULO`,`UNID_CONTENIDO`,`ASIG_ID`) VALUES 
- (1,'Tema1','la homosexualidad de montxo','montxo es gay',1),
- (2,'Tema 1 - GC','conocimiento','%{conocimiento}',3);
+ (1,'Tema 1','JSP mola a saco','Ipiña mola más',1),
+ (2,'Tema 1','Mk - El timo','Como timar',2),
+ (3,'Tema 1','La asignatura','Es de mofa, befa o sinónimo',3);
 /*!40000 ALTER TABLE `unidad` ENABLE KEYS */;
 
 
