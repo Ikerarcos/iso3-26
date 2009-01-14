@@ -1,4 +1,4 @@
--- MySQL Administrator dump 1.4
+ï»¿-- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------
 -- Server version	5.0.67-community-nt
@@ -190,10 +190,10 @@ CREATE TABLE `unidad` (
 --
 
 /*!40000 ALTER TABLE `unidad` DISABLE KEYS */;
-INSERT INTO `unidad` (`UNID_ID`,`UNID_ACRONIMO`,`UNID_TITULO`,`UNID_CONTENIDO`,`ASIG_ID`) VALUES 
- (1,'Tema 1','JSP mola a saco','Ipiña mola más',1),
- (2,'Tema 1','Mk - El timo','Como timar',2),
- (3,'Tema 1','La asignatura','Es de mofa, befa o sinónimo',3);
+INSERT INTO `unidad` (`UNID_ID`,`UNID_ACRONIMO`,`UNID_TITULO`,`UNID_CONTENIDO`,`ASIG_ID`) VALUES
+ (1,'Tema 1','JSP mola a saco','Ipia mola ms',1),
+ (2,'Tema 1.1','Mk - El timo','Como timar',2),
+ (3,'Tema 1.2','La asignatura','Es de mofa, befa o sinnimo',3);
 /*!40000 ALTER TABLE `unidad` ENABLE KEYS */;
 
 
